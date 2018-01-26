@@ -1,0 +1,20 @@
+<resources>
+    <string-array name="ukuran_array">
+        <item>kg</item>
+        <item>gram</item>
+    </string-array>
+
+    <string name="app_name">Harga Pasar</string>
+    <string name="app_description">Make your life easier, lorem ipsum</string>
+    <string name="title_home">Beranda</string>
+    <string name="title_usul_tempat">Usul Tempat</string>
+    <string name="num_komoditas">%d komoditas</string>
+    <string name="edit_place_name">Nama Tempat</string>
+    <string name="edit_place_lat">Lat Lng</string>
+    <string name="edit_place_address">Alamat Pasar</string>
+    <string name="komoditi_range_text">%d - %d</string>
+    <string name="nama_komoditas">Nama Komoditas</string>
+    <string name="harga_komoditas">Harga Satuan</string>
+    <string name="location_now">Lokasi Sekarang</string>
+
+</resources>

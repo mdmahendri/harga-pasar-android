@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="@dimen/text_img_margin"
+    app:cardUseCompatPadding="true">
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp">
+        
+        <ImageView
+            android:id="@+id/place_img"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:src="@drawable/header"
+            android:scaleType="centerCrop"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="150dp"/>
+
+        <TextView
+            android:id="@+id/place_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/place_img"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:text="Pasar Baru Jaya"
+            android:textColor="@android:color/white"
+            android:textSize="24sp"/>
+
+        <TextView
+            android:id="@+id/place_komoditas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/place_img"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:drawableLeft="@drawable/ic_filter_vintage_black_20dp"
+            android:drawablePadding="@dimen/text_img_margin"
+            android:text="25 komoditas"/>
+
+        <TextView
+            android:id="@+id/place_reward"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/place_komoditas"
+            android:layout_toRightOf="@id/place_komoditas"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:drawableLeft="@drawable/ic_copyright_black_20dp"
+            android:drawablePadding="@dimen/text_img_margin"
+            android:text="25 komoditas"/>
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/home_background"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:background="@drawable/header"/>
+
+        <TextView
+            android:id="@+id/app_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:text="@string/app_name"
+            android:textColor="@android:color/white"
+            android:textSize="25sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/app_name"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:text="@string/app_description"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"/>
+
+        <ImageView
+            android:id="@+id/profile_img"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_below="@id/home_background"
+            android:layout_marginTop="-35dp"
+            android:src="@drawable/profile_default"/>
+
+        <TextView
+            android:id="@+id/profile_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/home_background"
+            android:layout_toRightOf="@id/profile_img"
+            android:layout_marginTop="@dimen/mini_margin"
+            android:layout_marginLeft="@dimen/mini_margin"
+            android:drawableLeft="@drawable/ic_person_outline_black_24dp"
+            android:drawablePadding="@dimen/text_img_margin"
+            android:text="Mahendri Dwicahyo"/>
+
+        <TextView
+            android:id="@+id/profile_poin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/profile_name"
+            android:layout_toRightOf="@id/profile_img"
+            android:layout_marginLeft="@dimen/mini_margin"
+            android:drawableLeft="@drawable/ic_copyright_black_20dp"
+            android:drawablePadding="@dimen/text_img_margin"
+            android:text="100 poin"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycle_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:layout_below="@id/profile_img"/>
+    </RelativeLayout>
+
+</ScrollView>
