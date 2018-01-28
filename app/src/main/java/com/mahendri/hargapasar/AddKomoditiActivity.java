@@ -1,20 +1,19 @@
 package com.mahendri.hargapasar;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -25,14 +24,11 @@ import java.util.Locale;
 
 public class AddKomoditiActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private static final int REQUEST_PERMISSION_LOCATION = 1;
-
-    private View rootLayout;
     private TextInputEditText locationText;
-    private GoogleApiClient googleApiClient;
     private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback locationCallback;
 
+    AlertDialog permissionDialog;
     private double longitude;
     private double latitude;
 
@@ -47,7 +43,6 @@ public class AddKomoditiActivity extends AppCompatActivity implements View.OnCli
         }
 
         setContentView(R.layout.activity_add_komoditi);
-        rootLayout = findViewById(R.id.root_layout);
         locationText = findViewById(R.id.text_lat_lng);
         TextView tempatText = findViewById(R.id.text_tempat);
         FloatingActionButton fab = findViewById(R.id.add_komoditi_fab);
@@ -60,8 +55,26 @@ public class AddKomoditiActivity extends AppCompatActivity implements View.OnCli
             updateLocation();
         } else {
             // belum mendapat permission
-            requestLocationPermission();
+            permissionDialog = new AlertDialog.Builder(this)
+                    .setTitle("Lokasi Dibutuhkan")
+                    .setMessage("Lokasi diperlukan untuk mendata komoditas")
+                    .setNeutralButton("Keluar", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            finish();
+                        }
+                    })
+                    .create();
+            permissionDialog.show();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (permissionDialog.isShowing()) {
+            permissionDialog.dismiss();
+            finish();
+        } else super.onBackPressed();
     }
 
     @Override
@@ -85,44 +98,6 @@ public class AddKomoditiActivity extends AppCompatActivity implements View.OnCli
                 else
                     Toast.makeText(this, "lanjut ke simpan", Toast.LENGTH_SHORT).show();
                 break;
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-
-        if (requestCode == REQUEST_PERMISSION_LOCATION) {
-
-            // granted permission
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                updateLocation();
-            } else {
-                // meminta permission lagi
-                requestLocationPermission();
-            }
-        }
-    }
-
-    private void requestLocationPermission() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)) {
-
-            Snackbar.make(rootLayout, "Dibutuhkan akses lokasi untuk mendata komoditas",
-                    Snackbar.LENGTH_SHORT).setAction("OK", new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // meminta permission
-                    ActivityCompat.requestPermissions(AddKomoditiActivity.this,
-                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                            REQUEST_PERMISSION_LOCATION);
-                }
-            }).show();
-
-        } else {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    REQUEST_PERMISSION_LOCATION);
         }
     }
 

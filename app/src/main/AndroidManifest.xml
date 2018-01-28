@@ -2,7 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mahendri.hargapasar">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <!--
+        tidak membutuhkan deklarasi INTERNET dan ACCESS_NETWORK_STATE
+        https://developers.google.com/maps/documentation/android-api/config
+    -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
@@ -32,7 +35,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddUsulanActivity" />
+        <activity android:name=".unused.AddUsulanActivity" />
         <activity android:name=".KomoditiListActivity" />
         <activity android:name=".AddKomoditiActivity"></activity>
     </application>

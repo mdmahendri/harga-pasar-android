@@ -10,12 +10,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.mahendri.hargapasar.AddUsulanActivity;
+import com.mahendri.hargapasar.unused.AddUsulanActivity;
 import com.mahendri.hargapasar.R;
-import com.mahendri.hargapasar.UsulTempat;
-import com.mahendri.hargapasar.UsulTempatAdapter;
+import com.mahendri.hargapasar.unused.UsulTempat;
+import com.mahendri.hargapasar.unused.UsulTempatAdapter;
 
 import java.util.ArrayList;
 

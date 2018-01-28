@@ -1,7 +1,9 @@
-package com.mahendri.hargapasar;
+package com.mahendri.hargapasar.unused;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.mahendri.hargapasar.R;
 
 public class AddUsulanActivity extends AppCompatActivity {
 
