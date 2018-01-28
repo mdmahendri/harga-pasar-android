@@ -8,6 +8,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.mahendri.hargapasar.entity.Komoditi;
+
 import java.util.ArrayList;
 
 public class KomoditiListActivity extends AppCompatActivity implements View.OnClickListener {

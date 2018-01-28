@@ -1,4 +1,4 @@
-package com.mahendri.hargapasar;
+package com.mahendri.hargapasar.entity;
 
 /**
  * @author Mahendri Dwicahyo

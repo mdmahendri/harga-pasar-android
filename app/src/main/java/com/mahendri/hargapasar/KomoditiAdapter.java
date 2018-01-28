@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.mahendri.hargapasar.entity.Komoditi;
+
 import java.util.ArrayList;
 
 /**

@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 
 import com.mahendri.hargapasar.KomoditiListActivity;
 import com.mahendri.hargapasar.R;
-import com.mahendri.hargapasar.TempatPasar;
+import com.mahendri.hargapasar.entity.TempatPasar;
 import com.mahendri.hargapasar.TempatPasarAdapter;
 
 import java.util.ArrayList;

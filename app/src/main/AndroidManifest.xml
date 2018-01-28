@@ -37,7 +37,7 @@
         </activity>
         <activity android:name=".unused.AddUsulanActivity" />
         <activity android:name=".KomoditiListActivity" />
-        <activity android:name=".AddKomoditiActivity"></activity>
+        <activity android:name=".AddKomoditiActivity" />
     </application>
 
 </manifest>
