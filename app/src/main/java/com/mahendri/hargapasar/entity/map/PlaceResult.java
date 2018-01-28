@@ -1,5 +1,8 @@
 package com.mahendri.hargapasar.entity.map;
 
+import android.location.Location;
+
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
@@ -31,4 +34,11 @@ public class PlaceResult {
     private List<PlacePhoto> photos = new ArrayList<>();
     private List<String> types = new ArrayList<>();
 
+    public LatLng getLocation() {
+        return geometry.getLocation();
+    }
+
+    public String getName() {
+        return name;
+    }
 }

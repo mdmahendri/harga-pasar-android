@@ -20,4 +20,11 @@ public class PlaceNearbyResponse {
     private List<PlaceResult> results = new ArrayList<>();
     private String status;
 
+    public  String getStatus() {
+        return status;
+    }
+
+    public List<PlaceResult> getResults() {
+        return results;
+    }
 }
