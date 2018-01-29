@@ -34,6 +34,8 @@ public class PlaceResult {
     private List<PlacePhoto> photos = new ArrayList<>();
     private List<String> types = new ArrayList<>();
 
+    public String getId() { return id; }
+
     public LatLng getLocation() {
         return geometry.getLocation();
     }
@@ -41,4 +43,6 @@ public class PlaceResult {
     public String getName() {
         return name;
     }
+
+    public String getVicinity() { return vicinity; }
 }

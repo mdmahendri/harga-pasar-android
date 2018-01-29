@@ -2,6 +2,7 @@ package com.mahendri.hargapasar;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -9,11 +10,14 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
@@ -22,12 +26,16 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.mahendri.hargapasar.entity.map.PlaceNearbyResponse;
 import com.mahendri.hargapasar.entity.map.PlaceResult;
 import com.mahendri.hargapasar.network.RetrofitConnect;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -36,12 +44,21 @@ import retrofit2.Response;
 import timber.log.Timber;
 
 public class BaseActivity extends AppCompatActivity
-        implements OnMapReadyCallback, OnSuccessListener<Location> {
+        implements OnMapReadyCallback, OnSuccessListener<Location>,
+        GoogleMap.OnMarkerClickListener, View.OnClickListener {
 
     private static final int REQUEST_PERMISSION_LOCATION = 1;
 
     private View rootLayout;
+    private TextView titleText;
+    private TextView locationText;
+    private TextView distanceText;
+    private BottomSheetBehavior bottomSheetBehavior;
+
+    private Location currentLocation;
     private GoogleMap map;
+    private PlaceResult selectedPlace;
+    private HashMap<String, PlaceResult> placeMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +66,17 @@ public class BaseActivity extends AppCompatActivity
         setContentView(R.layout.activity_base);
 
         rootLayout = findViewById(R.id.root_layout);
+        View sheetLayout = findViewById(R.id.bottom_sheet);
+        titleText = sheetLayout.findViewById(R.id.place_title);
+        locationText = sheetLayout.findViewById(R.id.place_address);
+        distanceText = sheetLayout.findViewById(R.id.place_distance);
+        Button listKomoditasBtn = sheetLayout.findViewById(R.id.place_button);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.fragment_map);
+        bottomSheetBehavior = BottomSheetBehavior.from(sheetLayout);
+
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        listKomoditasBtn.setOnClickListener(this);
         mapFragment.getMapAsync(this);
     }
 
@@ -123,26 +149,18 @@ public class BaseActivity extends AppCompatActivity
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
-    private void addPasarMarker() {
-        MarkerOptions pasarBonsay = new MarkerOptions()
-                .position(new LatLng(-6.2307896, 106.8671854))
-                .icon(bitmapDescriptorFromVector(this, R.drawable.marker_market))
-                .title("Pasar Bonsay");
-
-        map.addMarker(pasarBonsay);
-    }
-
     @Override
     public void onSuccess(Location location) {
         if (location == null) {
             Timber.w("tidak dapat lokasi padahal setMyLocationEnabled true");
             return;
         }
-
-        RetrofitConnect.retrieveNearby(location).enqueue(new Callback<PlaceNearbyResponse>() {
+        currentLocation = location;
+        RetrofitConnect.retrieveNearby(currentLocation).enqueue(new Callback<PlaceNearbyResponse>() {
             @Override
             public void onResponse(@NonNull Call<PlaceNearbyResponse> call,
                                    @NonNull Response<PlaceNearbyResponse> response) {
+
                 if (!response.isSuccessful()) {
                     Timber.w("respon error");
                     return;
@@ -151,16 +169,23 @@ public class BaseActivity extends AppCompatActivity
                 PlaceNearbyResponse nearbyResponse = response.body();
                 Timber.i("Place name: %s", nearbyResponse.getStatus());
 
+                // tambahkan marker pada map
                 List<PlaceResult> placeResults = nearbyResponse.getResults();
+                placeMap = new HashMap<>(placeResults.size());
                 for (PlaceResult place : placeResults) {
-                    MarkerOptions marker = new MarkerOptions()
+
+                    MarkerOptions markerOptions = new MarkerOptions()
                             .position(place.getLocation())
-                            .icon(bitmapDescriptorFromVector(BaseActivity.this, R.drawable.marker_market))
+                            .icon(bitmapDescriptorFromVector(BaseActivity.this,
+                                    R.drawable.marker_market))
                             .title(place.getName());
-                    map.addMarker(marker);
+                    Marker marker = map.addMarker(markerOptions);
+                    placeMap.put(marker.getId(), place);
 
                 }
 
+                // set listener klik pada marker
+                map.setOnMarkerClickListener(BaseActivity.this);
             }
 
             @Override
@@ -168,5 +193,59 @@ public class BaseActivity extends AppCompatActivity
                 Timber.e(t);
             }
         });
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+
+        String uuid = marker.getId();
+        selectedPlace = placeMap.get(uuid);
+        setSheetValue(selectedPlace);
+
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        } else super.onBackPressed();
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.place_button:
+                Intent toAdd = new Intent(this, AddKomoditiActivity.class);
+                toAdd.putExtra("placeId", selectedPlace.getId());
+                startActivity(toAdd);
+                break;
+        }
+    }
+
+    private void setSheetValue(PlaceResult place) {
+
+        // tidak tercatat lokasi sekarang
+        if (currentLocation == null) {
+            checkMyLocationLayer();
+            return;
+        }
+
+        // konversi LatLng ke Location
+        LatLng latLng = place.getLocation();
+        Location loc = new Location("");
+        loc.setLatitude(latLng.latitude);
+        loc.setLongitude(latLng.longitude);
+        float distance = currentLocation.distanceTo(loc);
+
+        // pembulatan distance
+        DecimalFormat decimalFormat = new DecimalFormat("#.#");
+        decimalFormat.setRoundingMode(RoundingMode.CEILING);
+
+        // bind text ke view
+        titleText.setText(place.getName());
+        locationText.setText(place.getVicinity());
+        distanceText.setText(String.format("%s KM", decimalFormat.format(distance)));
     }
 }
