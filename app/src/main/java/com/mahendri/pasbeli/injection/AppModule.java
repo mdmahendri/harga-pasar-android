@@ -6,6 +6,7 @@ import android.arch.persistence.room.Room;
 import com.mahendri.pasbeli.api.GoogleMapService;
 import com.mahendri.pasbeli.database.HargaDao;
 import com.mahendri.pasbeli.database.PasBeliDatabase;
+import com.mahendri.pasbeli.database.PasarDao;
 import com.mahendri.pasbeli.preference.Constants;
 
 import javax.inject.Singleton;
@@ -39,5 +40,10 @@ class AppModule {
     @Singleton @Provides
     HargaDao provideHargaKomoditasDao(PasBeliDatabase pasBeliDatabase) {
         return pasBeliDatabase.hargaKomoditasDao();
+    }
+
+    @Singleton @Provides
+    PasarDao providePasarDao(PasBeliDatabase pasBeliDatabase) {
+        return pasBeliDatabase.pasarDao();
     }
 }

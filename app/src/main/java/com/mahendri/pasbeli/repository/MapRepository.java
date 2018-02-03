@@ -48,8 +48,6 @@ public class MapRepository {
 
                 PlaceNearbyResponse nearbyResponse = response.body();
                 Timber.i("Place name: %s", nearbyResponse.getStatus());
-
-                // tambahkan marker pada map
                 placeResults =  nearbyResponse.getResults();
             }
 

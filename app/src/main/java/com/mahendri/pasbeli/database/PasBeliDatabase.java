@@ -4,14 +4,16 @@ import android.arch.persistence.room.Database;
 import android.arch.persistence.room.RoomDatabase;
 
 import com.mahendri.pasbeli.entity.HargaKomoditas;
+import com.mahendri.pasbeli.entity.Pasar;
 
 /**
  * @author Mahendri
  */
 
-@Database(entities = {HargaKomoditas.class}, version = 1)
+@Database(entities = {HargaKomoditas.class, Pasar.class}, version = 1)
 public abstract class PasBeliDatabase extends RoomDatabase {
 
     public abstract HargaDao hargaKomoditasDao();
+    public abstract PasarDao pasarDao();
 
 }

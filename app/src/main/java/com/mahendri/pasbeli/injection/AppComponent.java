@@ -15,7 +15,7 @@ import dagger.android.AndroidInjectionModule;
  */
 
 @Singleton
-@Component(modules = {AndroidInjectionModule.class, AppModule.class})
+@Component(modules = {AndroidInjectionModule.class, AppModule.class, ActivityBindingModule.class})
 public interface AppComponent {
     void inject(PasBeli pasBeli);
 

@@ -31,6 +31,7 @@ import com.mahendri.pasbeli.R;
 import com.mahendri.pasbeli.api.map.PlaceResult;
 import com.mahendri.pasbeli.ui.harga.AddKomoditiActivity;
 import com.mahendri.pasbeli.ui.harga.DataHistoryActivity;
+import com.mahendri.pasbeli.util.DistanceConvert;
 import com.mahendri.pasbeli.util.VectorBitmapConvert;
 
 import java.math.RoundingMode;
@@ -67,8 +68,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         AndroidInjection.inject(this);
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         rootLayout = findViewById(R.id.root_layout);
@@ -226,20 +227,9 @@ public class MainActivity extends AppCompatActivity
             return;
         }
 
-        // konversi LatLng ke Location
-        LatLng latLng = place.getLocation();
-        Location loc = new Location("");
-        loc.setLatitude(latLng.latitude);
-        loc.setLongitude(latLng.longitude);
-        float distance = currentLocation.distanceTo(loc) / 1000;
-
-        // pembulatan distance
-        DecimalFormat decimalFormat = new DecimalFormat("#.#");
-        decimalFormat.setRoundingMode(RoundingMode.CEILING);
-
         // bind text ke view
         titleText.setText(place.getName());
         locationText.setText(place.getVicinity());
-        distanceText.setText(String.format("%s KM", decimalFormat.format(distance)));
+        distanceText.setText(String.format("%s KM", DistanceConvert.toKm(currentLocation, place)));
     }
 }

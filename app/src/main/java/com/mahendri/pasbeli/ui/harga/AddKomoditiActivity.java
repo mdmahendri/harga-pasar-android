@@ -134,12 +134,12 @@ public class AddKomoditiActivity extends AppCompatActivity implements View.OnCli
         }
 
         HargaKomoditas hargaKomoditas = new HargaKomoditas();
-        hargaKomoditas.setNamaKomoditas(namaText.getText().toString());
-        hargaKomoditas.setHargaKomoditas(Long.parseLong(hargaText.getText().toString()));
-        hargaKomoditas.setNamaTempat(namaTempatText.getText().toString());
-        hargaKomoditas.setLatitude(latitude);
-        hargaKomoditas.setLongitude(longitude);
-        hargaKomoditas.setWaktuCatat(System.currentTimeMillis());
+        hargaKomoditas.namaKomoditas = namaText.getText().toString();
+        hargaKomoditas.hargaKomoditas = Long.parseLong(hargaText.getText().toString());
+        hargaKomoditas.namaTempat = namaTempatText.getText().toString();
+        hargaKomoditas.latitude = latitude;
+        hargaKomoditas.longitude = longitude;
+        hargaKomoditas.waktuCatat = System.currentTimeMillis();
 
         hargaViewModel.insertNewHargaKomoditas(hargaKomoditas);
     }
