@@ -1,4 +1,4 @@
-package com.mahendri.pasbeli.entity.map;
+package com.mahendri.pasbeli.api.map;
 
 import com.google.android.gms.maps.model.LatLng;
 

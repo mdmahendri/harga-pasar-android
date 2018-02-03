@@ -4,8 +4,8 @@ import android.location.Location;
 import android.support.annotation.NonNull;
 
 import com.mahendri.pasbeli.api.GoogleMapService;
-import com.mahendri.pasbeli.entity.map.PlaceNearbyResponse;
-import com.mahendri.pasbeli.entity.map.PlaceResult;
+import com.mahendri.pasbeli.api.map.PlaceNearbyResponse;
+import com.mahendri.pasbeli.api.map.PlaceResult;
 import com.mahendri.pasbeli.preference.Constants;
 
 import java.util.List;

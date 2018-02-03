@@ -10,7 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.mahendri.pasbeli.R;
-import com.mahendri.pasbeli.entity.data.HargaKomoditas;
+import com.mahendri.pasbeli.entity.HargaKomoditas;
 
 import java.util.List;
 

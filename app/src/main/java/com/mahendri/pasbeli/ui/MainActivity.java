@@ -3,19 +3,14 @@ package com.mahendri.pasbeli.ui;
 import android.Manifest;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,14 +23,12 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.mahendri.pasbeli.R;
-import com.mahendri.pasbeli.entity.map.PlaceResult;
+import com.mahendri.pasbeli.api.map.PlaceResult;
 import com.mahendri.pasbeli.ui.harga.AddKomoditiActivity;
 import com.mahendri.pasbeli.ui.harga.DataHistoryActivity;
 import com.mahendri.pasbeli.util.VectorBitmapConvert;
@@ -50,7 +43,7 @@ import javax.inject.Inject;
 import dagger.android.AndroidInjection;
 import timber.log.Timber;
 
-public class BaseActivity extends AppCompatActivity
+public class MainActivity extends AppCompatActivity
         implements OnMapReadyCallback, OnSuccessListener<Location>,
         GoogleMap.OnMarkerClickListener, View.OnClickListener {
 
@@ -76,7 +69,7 @@ public class BaseActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AndroidInjection.inject(this);
-        setContentView(R.layout.activity_base);
+        setContentView(R.layout.activity_main);
 
         rootLayout = findViewById(R.id.root_layout);
         View sheetLayout = findViewById(R.id.bottom_sheet);
@@ -142,7 +135,7 @@ public class BaseActivity extends AppCompatActivity
                 @Override
                 public void onClick(View view) {
                     // meminta permission
-                    ActivityCompat.requestPermissions(BaseActivity.this,
+                    ActivityCompat.requestPermissions(MainActivity.this,
                             new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                             REQUEST_PERMISSION_LOCATION);
                 }
@@ -185,7 +178,7 @@ public class BaseActivity extends AppCompatActivity
         for (PlaceResult place : placeResults) {
             MarkerOptions markerOptions = new MarkerOptions()
                     .position(place.getLocation())
-                    .icon(VectorBitmapConvert.fromVector(BaseActivity.this,
+                    .icon(VectorBitmapConvert.fromVector(MainActivity.this,
                             R.drawable.marker_market))
                     .title(place.getName());
             Marker marker = map.addMarker(markerOptions);
@@ -193,7 +186,7 @@ public class BaseActivity extends AppCompatActivity
         }
 
         // set listener klik pada marker
-        map.setOnMarkerClickListener(BaseActivity.this);
+        map.setOnMarkerClickListener(MainActivity.this);
     }
 
     @Override

@@ -3,7 +3,7 @@ package com.mahendri.pasbeli.repository;
 import android.arch.lifecycle.LiveData;
 
 import com.mahendri.pasbeli.database.HargaDao;
-import com.mahendri.pasbeli.entity.data.HargaKomoditas;
+import com.mahendri.pasbeli.entity.HargaKomoditas;
 
 import java.util.List;
 

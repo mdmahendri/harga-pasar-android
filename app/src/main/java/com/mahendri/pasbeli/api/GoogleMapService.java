@@ -1,6 +1,6 @@
 package com.mahendri.pasbeli.api;
 
-import com.mahendri.pasbeli.entity.map.PlaceNearbyResponse;
+import com.mahendri.pasbeli.api.map.PlaceNearbyResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

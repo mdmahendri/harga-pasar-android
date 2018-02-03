@@ -4,7 +4,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 import android.os.AsyncTask;
 
-import com.mahendri.pasbeli.entity.data.HargaKomoditas;
+import com.mahendri.pasbeli.entity.HargaKomoditas;
 import com.mahendri.pasbeli.repository.HargaRepository;
 
 import java.util.List;

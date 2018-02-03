@@ -5,7 +5,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 
-import com.mahendri.pasbeli.entity.data.HargaKomoditas;
+import com.mahendri.pasbeli.entity.HargaKomoditas;
 
 import java.util.List;
 

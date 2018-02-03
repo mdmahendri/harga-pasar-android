@@ -22,7 +22,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.mahendri.pasbeli.R;
-import com.mahendri.pasbeli.entity.data.HargaKomoditas;
+import com.mahendri.pasbeli.entity.HargaKomoditas;
 
 import java.util.Locale;
 

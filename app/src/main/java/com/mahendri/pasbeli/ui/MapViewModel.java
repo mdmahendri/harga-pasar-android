@@ -3,7 +3,7 @@ package com.mahendri.pasbeli.ui;
 import android.arch.lifecycle.ViewModel;
 import android.location.Location;
 
-import com.mahendri.pasbeli.entity.map.PlaceResult;
+import com.mahendri.pasbeli.api.map.PlaceResult;
 import com.mahendri.pasbeli.repository.MapRepository;
 
 import java.util.List;

@@ -18,38 +18,40 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support:design:26.1.0'
     implementation 'com.android.support:cardview-v7:26.1.0'
     implementation 'com.android.support:support-vector-drawable:26.1.0'
-
     // google play service
     implementation 'com.google.android.gms:play-services-maps:11.8.0'
     implementation 'com.google.android.gms:play-services-location:11.8.0'
     implementation 'com.google.android.gms:play-services-places:11.8.0'
-
     // architecture component
     implementation 'android.arch.lifecycle:extensions:1.1.0'
     implementation 'android.arch.persistence.room:runtime:1.0.0'
     annotationProcessor 'android.arch.lifecycle:compiler:1.1.0'
     annotationProcessor 'android.arch.persistence.room:compiler:1.0.0'
-
     // dagger 2
-    implementation 'com.google.dagger:dagger:2.14.1' // core
-    implementation 'com.google.dagger:dagger-android-support:2.14.1' // android support library
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.14.1' // core
-    annotationProcessor 'com.google.dagger:dagger-android-processor:2.14.1' // android
-
+    implementation 'com.google.dagger:dagger:2.14.1'
+    // core
+    implementation 'com.google.dagger:dagger-android-support:2.14.1'
+    // android support library
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.14.1'
+    // core
+    annotationProcessor 'com.google.dagger:dagger-android-processor:2.14.1'
+    // android
     implementation 'com.jakewharton.timber:timber:4.6.0'
     implementation 'com.google.code.gson:gson:2.8.2'
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
-
     // testing library
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     testImplementation 'junit:junit:4.12'
