@@ -12,6 +12,7 @@
         android:layout_height="wrap_content">
 
         <android.support.design.widget.TextInputEditText
+            android:id="@+id/text_nama_komoditas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/nama_komoditas"/>
@@ -31,6 +32,7 @@
             android:layout_height="wrap_content">
 
             <android.support.design.widget.TextInputEditText
+                android:id="@+id/text_harga"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/harga_komoditas"/>
@@ -53,7 +55,7 @@
         android:layout_below="@id/container_price">
 
         <android.support.design.widget.TextInputEditText
-            android:id="@+id/text_tempat"
+            android:id="@+id/text_nama_tempat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/edit_place_name"

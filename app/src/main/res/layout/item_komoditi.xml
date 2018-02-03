@@ -4,57 +4,44 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/komoditi_img"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:background="@android:color/darker_gray"
-        android:scaleType="centerCrop"/>
-
     <TextView
-        android:id="@+id/komoditi_name"
+        android:id="@+id/komoditi_data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/mini_margin"
-        android:layout_toRightOf="@id/komoditi_img"
-        android:text="Bayam"/>
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:text="mendata Bayam seharga Rp 5000"
+        android:textSize="15sp"
+        android:textColor="@android:color/black"/>
 
     <TextView
-        android:id="@+id/komoditi_reward"
+        android:id="@+id/komoditi_tempat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="@dimen/text_img_margin"
-        android:text="15"
-        android:textStyle="bold"
-        android:background="@android:color/holo_green_dark"
-        android:layout_alignParentRight="true"
-        android:textColor="@android:color/white"/>
-
-    <TextView
-        android:id="@+id/komoditi_range"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/komoditi_name"
-        android:layout_below="@id/komoditi_name"
-        android:drawableLeft="@drawable/ic_copyright_black_20dp"
+        android:layout_alignLeft="@id/komoditi_data"
+        android:layout_below="@id/komoditi_data"
+        android:drawableLeft="@drawable/ic_location_on_black_24dp"
         android:drawablePadding="@dimen/text_img_margin"
-        android:text="Rp 15000 - 20000"/>
+        android:layout_marginTop="@dimen/text_img_margin"
+        android:text="Pasar Genjing"/>
 
     <TextView
-        android:id="@+id/komoditi_satuan"
-        android:layout_toRightOf="@id/komoditi_range"
-        android:layout_alignTop="@id/komoditi_range"
+        android:id="@+id/komoditi_waktu"
+        android:layout_toRightOf="@id/komoditi_tempat"
+        android:layout_alignTop="@id/komoditi_tempat"
         android:layout_marginLeft="@dimen/mini_margin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/ic_filter_vintage_black_20dp"
+        android:drawableLeft="@drawable/ic_access_time_black_24dp"
         android:drawablePadding="@dimen/text_img_margin"
-        android:text="Satuan: kilogram"/>
+        android:text="13:40"/>
 
     <View
         android:id="@+id/komoditi_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@android:color/darker_gray"
-        android:layout_below="@id/komoditi_img"/>
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_below="@id/komoditi_tempat"/>
+
 </RelativeLayout>
