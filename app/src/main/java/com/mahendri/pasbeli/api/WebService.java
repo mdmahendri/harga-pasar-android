@@ -1,5 +1,10 @@
 package com.mahendri.pasbeli.api;
 
+import com.mahendri.pasbeli.entity.HargaKomoditas;
+
+import java.util.List;
+
+import retrofit2.http.Body;
 import retrofit2.http.POST;
 
 /**
@@ -9,6 +14,6 @@ import retrofit2.http.POST;
 public interface WebService {
 
     @POST("api/harga")
-    void sendHargaBaru();
+    void sendHargaBaru(@Body List<HargaKomoditas> daftarHarga);
 
 }

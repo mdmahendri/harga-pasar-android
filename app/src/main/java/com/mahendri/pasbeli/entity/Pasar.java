@@ -26,6 +26,8 @@ public class Pasar {
 
     public double longitude;
 
+    public Pasar(){}
+
     public Pasar(PlaceResult placeResult) {
         uuid = placeResult.getPlaceId();
         nama = placeResult.getName();

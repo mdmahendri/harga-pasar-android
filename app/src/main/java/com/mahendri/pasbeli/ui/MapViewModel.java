@@ -17,7 +17,7 @@ import javax.inject.Inject;
  * @author Mahendri
  */
 
-class MapViewModel extends ViewModel {
+public class MapViewModel extends ViewModel {
 
     private MapRepository mapRepository;
 

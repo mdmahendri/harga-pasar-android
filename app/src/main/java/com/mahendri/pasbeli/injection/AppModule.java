@@ -6,10 +6,12 @@ import android.arch.persistence.room.Room;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.mahendri.pasbeli.api.GoogleMapService;
+import com.mahendri.pasbeli.api.WebService;
 import com.mahendri.pasbeli.database.HargaDao;
 import com.mahendri.pasbeli.database.PasBeliDb;
 import com.mahendri.pasbeli.database.PasarDao;
 import com.mahendri.pasbeli.preference.Constants;
+import com.mahendri.pasbeli.util.LiveDataCallAdapterFactory;
 
 import javax.inject.Singleton;
 
@@ -30,8 +32,19 @@ class AppModule {
         return new Retrofit.Builder()
                 .baseUrl(Constants.MAP_WEB_SERVICE)
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(new LiveDataCallAdapterFactory())
                 .build()
                 .create(GoogleMapService.class);
+    }
+
+    @Singleton @Provides
+    WebService provideWebService() {
+        return new Retrofit.Builder()
+                .baseUrl(Constants.WEB_SERVICE)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(new LiveDataCallAdapterFactory())
+                .build()
+                .create(WebService.class);
     }
 
     @Singleton @Provides

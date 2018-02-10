@@ -17,7 +17,7 @@ public interface GoogleMapService {
     /*
      * response berisi tempat terdekat dari lokasi sekarang
      */
-    @GET("api/place/nearbysearch/json?keyword=pasar%20traditional%20market&language=id&rankby=distance")
+    @GET("api/place/nearbysearch/json?keyword=pasar%20traditional%20market&rankby=distance")
     LiveData<ApiResponse<PlaceNearbyResponse>> listNearbyMarket(@Query("key") String apiKey,
                               @Query("location") String location);
 

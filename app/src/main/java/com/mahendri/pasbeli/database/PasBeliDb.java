@@ -10,7 +10,7 @@ import com.mahendri.pasbeli.entity.Pasar;
  * @author Mahendri
  */
 
-@Database(entities = {HargaKomoditas.class, Pasar.class}, version = 1)
+@Database(entities = {HargaKomoditas.class, Pasar.class}, version = 1, exportSchema = false)
 public abstract class PasBeliDb extends RoomDatabase {
 
     public abstract HargaDao hargaKomoditasDao();

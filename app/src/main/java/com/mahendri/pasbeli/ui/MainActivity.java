@@ -28,7 +28,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.mahendri.pasbeli.R;
-import com.mahendri.pasbeli.api.map.PlaceResult;
 import com.mahendri.pasbeli.entity.Pasar;
 import com.mahendri.pasbeli.ui.harga.AddKomoditiActivity;
 import com.mahendri.pasbeli.ui.harga.DataHistoryActivity;
@@ -93,7 +92,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_base, menu);
+        getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
     }
 
@@ -103,6 +102,8 @@ public class MainActivity extends AppCompatActivity
             case R.id.navigation_history:
                 startActivity(new Intent(this, DataHistoryActivity.class));
                 return true;
+            case R.id.send_data:
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -111,6 +112,12 @@ public class MainActivity extends AppCompatActivity
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         checkMyLocationLayer();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (map != null) checkMyLocationLayer();
     }
 
     @Override
