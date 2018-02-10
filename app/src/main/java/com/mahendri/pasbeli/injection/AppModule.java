@@ -3,9 +3,11 @@ package com.mahendri.pasbeli.injection;
 import android.app.Application;
 import android.arch.persistence.room.Room;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.mahendri.pasbeli.api.GoogleMapService;
 import com.mahendri.pasbeli.database.HargaDao;
-import com.mahendri.pasbeli.database.PasBeliDatabase;
+import com.mahendri.pasbeli.database.PasBeliDb;
 import com.mahendri.pasbeli.database.PasarDao;
 import com.mahendri.pasbeli.preference.Constants;
 
@@ -33,17 +35,22 @@ class AppModule {
     }
 
     @Singleton @Provides
-    PasBeliDatabase provideDatabase(Application app) {
-        return Room.databaseBuilder(app, PasBeliDatabase.class, "pasbeli.db").build();
+    PasBeliDb provideDatabase(Application app) {
+        return Room.databaseBuilder(app, PasBeliDb.class, "pasbeli.db").build();
     }
 
     @Singleton @Provides
-    HargaDao provideHargaKomoditasDao(PasBeliDatabase pasBeliDatabase) {
-        return pasBeliDatabase.hargaKomoditasDao();
+    HargaDao provideHargaKomoditasDao(PasBeliDb pasBeliDb) {
+        return pasBeliDb.hargaKomoditasDao();
     }
 
     @Singleton @Provides
-    PasarDao providePasarDao(PasBeliDatabase pasBeliDatabase) {
-        return pasBeliDatabase.pasarDao();
+    PasarDao providePasarDao(PasBeliDb pasBeliDb) {
+        return pasBeliDb.pasarDao();
+    }
+
+    @Singleton @Provides
+    FusedLocationProviderClient locationProviderClient(Application app) {
+        return LocationServices.getFusedLocationProviderClient(app);
     }
 }

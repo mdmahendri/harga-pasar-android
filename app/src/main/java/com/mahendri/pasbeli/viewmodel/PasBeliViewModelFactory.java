@@ -20,7 +20,7 @@ public class PasBeliViewModelFactory implements ViewModelProvider.Factory {
     private final Map<Class<? extends ViewModel>, Provider<ViewModel>> creators;
 
     @Inject
-    public PasBeliViewModelFactory(Map<Class<? extends ViewModel>, Provider<ViewModel>> creators) {
+    PasBeliViewModelFactory(Map<Class<? extends ViewModel>, Provider<ViewModel>> creators) {
         this.creators = creators;
     }
 

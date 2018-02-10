@@ -11,7 +11,7 @@ import com.mahendri.pasbeli.entity.Pasar;
  */
 
 @Database(entities = {HargaKomoditas.class, Pasar.class}, version = 1)
-public abstract class PasBeliDatabase extends RoomDatabase {
+public abstract class PasBeliDb extends RoomDatabase {
 
     public abstract HargaDao hargaKomoditasDao();
     public abstract PasarDao pasarDao();

@@ -18,7 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -29,13 +29,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.mahendri.pasbeli.R;
 import com.mahendri.pasbeli.api.map.PlaceResult;
+import com.mahendri.pasbeli.entity.Pasar;
 import com.mahendri.pasbeli.ui.harga.AddKomoditiActivity;
 import com.mahendri.pasbeli.ui.harga.DataHistoryActivity;
 import com.mahendri.pasbeli.util.DistanceConvert;
 import com.mahendri.pasbeli.util.VectorBitmapConvert;
 
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 
@@ -53,6 +52,9 @@ public class MainActivity extends AppCompatActivity
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
+    @Inject
+    FusedLocationProviderClient fusedLocationClient;
+
     MapViewModel mapViewModel;
 
     private View rootLayout;
@@ -63,8 +65,8 @@ public class MainActivity extends AppCompatActivity
 
     private Location currentLocation;
     private GoogleMap map;
-    private PlaceResult selectedPlace;
-    private HashMap<String, PlaceResult> placeMap;
+    private Pasar selectedPasar;
+    private HashMap<String, Pasar> placeMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,15 +134,12 @@ public class MainActivity extends AppCompatActivity
                 Manifest.permission.ACCESS_FINE_LOCATION)) {
 
             Snackbar.make(rootLayout, "Dibutuhkan akses lokasi untuk mendata komoditas",
-                    Snackbar.LENGTH_SHORT).setAction("OK", new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // meminta permission
-                    ActivityCompat.requestPermissions(MainActivity.this,
-                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                            REQUEST_PERMISSION_LOCATION);
-                }
-            }).show();
+                    Snackbar.LENGTH_SHORT).setAction("OK", view -> {
+                        // meminta permission
+                        ActivityCompat.requestPermissions(MainActivity.this,
+                                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                REQUEST_PERMISSION_LOCATION);
+                    }).show();
 
         } else {
             ActivityCompat.requestPermissions(this,
@@ -156,9 +155,7 @@ public class MainActivity extends AppCompatActivity
             map.setMyLocationEnabled(true);
 
             // get lokasi sekarang
-            LocationServices.getFusedLocationProviderClient(this)
-                    .getLastLocation()
-                    .addOnSuccessListener(this, this);
+            fusedLocationClient.getLastLocation().addOnSuccessListener(this, this);
 
         } else requestLocationPermission();
     }
@@ -169,22 +166,25 @@ public class MainActivity extends AppCompatActivity
             Timber.w("tidak dapat lokasi padahal setMyLocationEnabled true");
             return;
         }
-
         currentLocation = location;
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(),
                 location.getLongitude()), 15));
 
-        List<PlaceResult> placeResults = mapViewModel.getMapNearby(currentLocation);
-        placeMap = new HashMap<>(placeResults.size());
-        for (PlaceResult place : placeResults) {
-            MarkerOptions markerOptions = new MarkerOptions()
-                    .position(place.getLocation())
-                    .icon(VectorBitmapConvert.fromVector(MainActivity.this,
-                            R.drawable.marker_market))
-                    .title(place.getName());
-            Marker marker = map.addMarker(markerOptions);
-            placeMap.put(marker.getId(), place);
-        }
+        mapViewModel.getMapNearby(currentLocation).observe(this, listResource -> {
+            if (listResource != null && listResource.data != null) {
+                List<Pasar> daftarPasar = listResource.data;
+                placeMap = new HashMap<>(daftarPasar.size());
+                for (Pasar pasar : daftarPasar) {
+                    MarkerOptions markerOptions = new MarkerOptions()
+                            .position(pasar.getLocation())
+                            .icon(VectorBitmapConvert.fromVector(MainActivity.this,
+                                    R.drawable.marker_market))
+                            .title(pasar.nama);
+                    Marker marker = map.addMarker(markerOptions);
+                    placeMap.put(marker.getId(), pasar);
+                }
+            }
+        });
 
         // set listener klik pada marker
         map.setOnMarkerClickListener(MainActivity.this);
@@ -194,8 +194,8 @@ public class MainActivity extends AppCompatActivity
     public boolean onMarkerClick(Marker marker) {
 
         String uuid = marker.getId();
-        selectedPlace = placeMap.get(uuid);
-        setSheetValue(selectedPlace);
+        selectedPasar = placeMap.get(uuid);
+        setSheetValue(selectedPasar);
 
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         return false;
@@ -213,13 +213,13 @@ public class MainActivity extends AppCompatActivity
         switch (view.getId()) {
             case R.id.place_button:
                 Intent toAdd = new Intent(this, AddKomoditiActivity.class);
-                toAdd.putExtra("LOC_NAME", selectedPlace.getName());
+                toAdd.putExtra("LOC_NAME", selectedPasar.nama);
                 startActivity(toAdd);
                 break;
         }
     }
 
-    private void setSheetValue(PlaceResult place) {
+    private void setSheetValue(Pasar pasar) {
 
         // tidak tercatat lokasi sekarang
         if (currentLocation == null) {
@@ -228,8 +228,9 @@ public class MainActivity extends AppCompatActivity
         }
 
         // bind text ke view
-        titleText.setText(place.getName());
-        locationText.setText(place.getVicinity());
-        distanceText.setText(String.format("%s KM", DistanceConvert.toKm(currentLocation, place)));
+        titleText.setText(pasar.nama);
+        locationText.setText(pasar.alamat);
+        distanceText.setText(String.format("%s KM", DistanceConvert.toKm(currentLocation,
+                pasar.getLocation())));
     }
 }

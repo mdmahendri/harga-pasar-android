@@ -14,10 +14,9 @@ import java.text.DecimalFormat;
 
 public class DistanceConvert {
 
-    public static String toKm(Location currentLocation, PlaceResult placeResult) {
+    public static String toKm(Location currentLocation, LatLng latLng) {
 
         // konversi LatLng ke Location
-        LatLng latLng = placeResult.getLocation();
         Location loc = new Location("");
         loc.setLatitude(latLng.latitude);
         loc.setLongitude(latLng.longitude);

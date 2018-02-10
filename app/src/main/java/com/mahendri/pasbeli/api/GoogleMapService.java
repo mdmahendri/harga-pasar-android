@@ -1,5 +1,7 @@
 package com.mahendri.pasbeli.api;
 
+import android.arch.lifecycle.LiveData;
+
 import com.mahendri.pasbeli.api.map.PlaceNearbyResponse;
 
 import retrofit2.Call;
@@ -16,7 +18,7 @@ public interface GoogleMapService {
      * response berisi tempat terdekat dari lokasi sekarang
      */
     @GET("api/place/nearbysearch/json?keyword=pasar%20traditional%20market&language=id&rankby=distance")
-    Call<PlaceNearbyResponse> listNearbyMarket(@Query("key") String apiKey,
-                                               @Query("location") String location);
+    LiveData<ApiResponse<PlaceNearbyResponse>> listNearbyMarket(@Query("key") String apiKey,
+                              @Query("location") String location);
 
 }

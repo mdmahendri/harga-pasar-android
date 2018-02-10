@@ -1,11 +1,19 @@
 package com.mahendri.pasbeli.repository;
 
+import android.arch.lifecycle.LiveData;
 import android.location.Location;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
+import com.mahendri.pasbeli.AppExecutors;
+import com.mahendri.pasbeli.api.ApiResponse;
 import com.mahendri.pasbeli.api.GoogleMapService;
 import com.mahendri.pasbeli.api.map.PlaceNearbyResponse;
 import com.mahendri.pasbeli.api.map.PlaceResult;
+import com.mahendri.pasbeli.database.PasBeliDb;
+import com.mahendri.pasbeli.database.PasarDao;
+import com.mahendri.pasbeli.entity.Pasar;
+import com.mahendri.pasbeli.entity.Resource;
 import com.mahendri.pasbeli.preference.Constants;
 
 import java.util.List;
@@ -25,37 +33,55 @@ import timber.log.Timber;
 @Singleton
 public class MapRepository {
 
+    private final AppExecutors appExecutors;
+    private final PasBeliDb pasBeliDb;
+    private final PasarDao pasarDao;
     private final GoogleMapService googleMapService;
     private List<PlaceResult> placeResults;
 
     @Inject
-    MapRepository(GoogleMapService googleMapService) {
+    MapRepository(AppExecutors appExecutors, PasBeliDb pasBeliDb, PasarDao pasarDao,
+                  GoogleMapService googleMapService) {
+        this.appExecutors = appExecutors;
+        this.pasBeliDb = pasBeliDb;
+        this.pasarDao = pasarDao;
         this.googleMapService = googleMapService;
     }
 
-    public List<PlaceResult> getNearbyPasar(Location location) {
-        String locationString = String.format("%s,%s", location.getLatitude(), location.getLongitude());
+    public LiveData<Resource<List<Pasar>>> getNearbyPasar(Location location) {
+        return new NetworkBoundResource<List<Pasar>, PlaceNearbyResponse>(appExecutors) {
 
-        googleMapService.listNearbyMarket(Constants.GOOGLE_API_KEY, locationString)
-                .enqueue(new Callback<PlaceNearbyResponse>() {
             @Override
-            public void onResponse(@NonNull Call<PlaceNearbyResponse> call,
-                                   @NonNull Response<PlaceNearbyResponse> response) {
-                if (!response.isSuccessful()) {
-                    Timber.w("respon error");
-                    return;
+            protected void saveCallResult(@NonNull PlaceNearbyResponse item) {
+                pasBeliDb.beginTransaction();
+                try {
+                    for(PlaceResult place : item.getResults())
+                        pasarDao.insertPasar(new Pasar(place));
+                    pasBeliDb.setTransactionSuccessful();
+                } finally {
+                    pasBeliDb.endTransaction();
                 }
-
-                PlaceNearbyResponse nearbyResponse = response.body();
-                Timber.i("Place name: %s", nearbyResponse.getStatus());
-                placeResults =  nearbyResponse.getResults();
             }
 
             @Override
-            public void onFailure(Call<PlaceNearbyResponse> call, Throwable t) {
-                Timber.w(t);
+            protected boolean shouldFetch(@Nullable List<Pasar> data) {
+                return data == null || data.size() < 20;
             }
-        });
-        return placeResults;
+
+            @NonNull
+            @Override
+            protected LiveData<List<Pasar>> loadFromDb() {
+                return pasarDao.loadDaftarPasar(location.getLatitude(), location.getLatitude());
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<PlaceNearbyResponse>> createCall() {
+                String locationString = String.format("%s,%s", location.getLatitude(),
+                        location.getLongitude());
+                return googleMapService.listNearbyMarket(Constants.GOOGLE_API_KEY, locationString);
+            }
+
+        }.asLiveData();
     }
 }

@@ -32,7 +32,6 @@ import dagger.android.AndroidInjection;
 
 public class AddKomoditiActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback locationCallback;
 
     private TextInputEditText namaText;
@@ -46,6 +45,9 @@ public class AddKomoditiActivity extends AppCompatActivity implements View.OnCli
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
+
+    @Inject
+    FusedLocationProviderClient fusedLocationClient;
 
     HargaViewModel hargaViewModel;
 
@@ -155,20 +157,14 @@ public class AddKomoditiActivity extends AppCompatActivity implements View.OnCli
             locationCallback = new LocationCallback() {
                 @Override
                 public void onLocationResult(LocationResult locationResult) {
-                    for (Location location : locationResult.getLocations()) {
-                        longitude = location.getLongitude();
-                        latitude = location.getLatitude();
+                    Location lastLocation = locationResult.getLastLocation();
+                    longitude = lastLocation.getLongitude();
+                    latitude = lastLocation.getLatitude();
 
-                        locationText.setText(String.format(Locale.US,"%s, %s",
-                                latitude, longitude));
-                    }
+                    locationText.setText(String.format(Locale.getDefault(),"%s, %s",
+                            latitude, longitude));
                 }
             };
-
-            // init untuk pertama kalinya
-            if (fusedLocationClient == null){
-                fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-            }
 
             fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
         }

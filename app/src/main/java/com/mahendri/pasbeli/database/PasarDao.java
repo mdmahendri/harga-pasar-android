@@ -17,10 +17,15 @@ import java.util.List;
 @Dao
 public interface PasarDao {
 
-    @Query("SELECT * FROM Pasar")
-    LiveData<List<Pasar>> loadDaftarPasar();
+    @Query("SELECT * FROM Pasar ORDER BY ((latitude - :latUser) * (latitude - :latUser))"
+            + " + ((longitude - :lngUser) * (longitude - :lngUser)) ASC"
+            + " LIMIT 20")
+    LiveData<List<Pasar>> loadDaftarPasar(double latUser, double lngUser);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertPasar(List<Pasar> daftarPasar);
+    void insertPasar(Pasar pasar);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertDaftarPasar(List<Pasar> daftarPasar);
 
 }
