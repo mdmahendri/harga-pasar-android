@@ -19,6 +19,9 @@ public interface HargaDao {
     @Query("SELECT * FROM HargaKomoditas")
     LiveData<List<HargaKomoditas>> loadHargaKomoditasList();
 
+    @Query("SELECT * FROM HargaKomoditas WHERE uploaded = 0")
+    LiveData<List<HargaKomoditas>> getUnsendDataHarga();
+
     @Insert
     long insert(HargaKomoditas harga);
 

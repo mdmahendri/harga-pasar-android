@@ -29,15 +29,9 @@ public class HargaViewModel extends ViewModel {
     }
 
     void insertNewHargaKomoditas(HargaKomoditas hargaKomoditas) {
-        new InsertKomoditas().execute(hargaKomoditas);
+        repository.insertNewEntry(hargaKomoditas);
     }
 
-    class InsertKomoditas extends AsyncTask<HargaKomoditas, Void, Void> {
 
-        @Override
-        protected Void doInBackground(HargaKomoditas... hargaKomoditas) {
-            repository.insertNewEntry(hargaKomoditas[0]);
-            return null;
-        }
-    }
+
 }

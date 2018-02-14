@@ -37,7 +37,6 @@ public class MapRepository {
     private final PasBeliDb pasBeliDb;
     private final PasarDao pasarDao;
     private final GoogleMapService googleMapService;
-    private List<PlaceResult> placeResults;
 
     @Inject
     MapRepository(AppExecutors appExecutors, PasBeliDb pasBeliDb, PasarDao pasarDao,

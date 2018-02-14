@@ -31,6 +31,8 @@ public class HargaKomoditas {
     @ColumnInfo(name = "nama_tempat")
     public String namaTempat;
 
+    public int uploaded = 0;
+
     public double latitude;
 
     public double longitude;

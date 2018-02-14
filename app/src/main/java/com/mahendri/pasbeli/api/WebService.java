@@ -4,6 +4,7 @@ import com.mahendri.pasbeli.entity.HargaKomoditas;
 
 import java.util.List;
 
+import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
 
@@ -14,6 +15,6 @@ import retrofit2.http.POST;
 public interface WebService {
 
     @POST("api/harga")
-    void sendHargaBaru(@Body List<HargaKomoditas> daftarHarga);
+    Call<String> sendHargaBaru(@Body List<HargaKomoditas> daftarHarga);
 
 }
