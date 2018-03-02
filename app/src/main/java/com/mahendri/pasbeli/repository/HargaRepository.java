@@ -3,17 +3,28 @@ package com.mahendri.pasbeli.repository;
 import android.arch.lifecycle.LiveData;
 
 import com.mahendri.pasbeli.AppExecutors;
-import com.mahendri.pasbeli.api.ApiResponse;
 import com.mahendri.pasbeli.api.WebService;
 import com.mahendri.pasbeli.database.HargaDao;
-import com.mahendri.pasbeli.entity.HargaKomoditas;
+import com.mahendri.pasbeli.entity.HargaKonsumen;
 
+import java.util.EmptyStackException;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import retrofit2.Call;
+import io.reactivex.Completable;
+import io.reactivex.CompletableObserver;
+import io.reactivex.CompletableSource;
+import io.reactivex.Maybe;
+import io.reactivex.Single;
+import io.reactivex.SingleSource;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import retrofit2.HttpException;
+import timber.log.Timber;
 
 /**
  * @author Mahendri
@@ -32,18 +43,20 @@ public class HargaRepository {
         this.webService = webService;
     }
 
-    public LiveData<List<HargaKomoditas>> getAllKomoditas() {
+    public LiveData<List<HargaKonsumen>> getAllKomoditas() {
         return hargaDao.loadHargaKomoditasList();
     }
 
-    public void insertNewEntry(HargaKomoditas komoditas) {
-        appExecutors.diskIO().execute(() -> {
-            hargaDao.insert(komoditas);
-        });
+    public void insertNewEntry(HargaKonsumen komoditas) {
+        appExecutors.diskIO().execute(() -> hargaDao.insertHarga(komoditas));
     }
 
-    public Call<String> sendDataEntry() {
-        return webService.sendHargaBaru(hargaDao.getUnsendDataHarga().getValue());
+    public Completable sendDataEntry() {
+        return Maybe.fromCallable(hargaDao::getUnsendDataHarga).flatMapCompletable(hargaKonsumen -> {
+            Timber.i("array ada isinya: %s", hargaKonsumen != null && hargaKonsumen.size() != 0);
+            if (hargaKonsumen == null || hargaKonsumen.size() == 0 )
+                throw new Exception("daftar entri kosong");
+            else return webService.sendHargaBaru(hargaKonsumen);
+        }).doOnComplete(hargaDao::updateHarga);
     }
-
 }

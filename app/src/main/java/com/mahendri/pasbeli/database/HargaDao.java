@@ -4,8 +4,9 @@ import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
-import com.mahendri.pasbeli.entity.HargaKomoditas;
+import com.mahendri.pasbeli.entity.HargaKonsumen;
 
 import java.util.List;
 
@@ -16,13 +17,15 @@ import java.util.List;
 @Dao
 public interface HargaDao {
 
-    @Query("SELECT * FROM HargaKomoditas")
-    LiveData<List<HargaKomoditas>> loadHargaKomoditasList();
+    @Query("SELECT * FROM HargaKonsumen")
+    LiveData<List<HargaKonsumen>> loadHargaKomoditasList();
 
-    @Query("SELECT * FROM HargaKomoditas WHERE uploaded = 0")
-    LiveData<List<HargaKomoditas>> getUnsendDataHarga();
+    @Query("SELECT * FROM HargaKonsumen WHERE uploaded = 0")
+    List<HargaKonsumen> getUnsendDataHarga();
 
     @Insert
-    long insert(HargaKomoditas harga);
+    long insertHarga(HargaKonsumen harga);
 
+    @Query("UPDATE HargaKonsumen SET uploaded = 1 WHERE uploaded = 0")
+    void updateHarga();
 }

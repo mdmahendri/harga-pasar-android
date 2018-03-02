@@ -10,17 +10,17 @@ import android.arch.persistence.room.PrimaryKey;
 
 @Entity
 @SuppressWarnings("unused")
-public class HargaKomoditas {
+public class HargaKonsumen {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id_entry")
     public long idEntry;
 
-    @ColumnInfo(name = "nama_komoditas")
-    public String namaKomoditas;
+    @ColumnInfo(name = "nama_barang")
+    public String namaBarang;
 
-    @ColumnInfo(name = "harga_komoditas")
-    public long hargaKomoditas;
+    @ColumnInfo(name = "harga_barang")
+    public long hargaBarang;
 
     @ColumnInfo(name = "waktu_catat")
     public long waktuCatat;
@@ -36,4 +36,9 @@ public class HargaKomoditas {
     public double latitude;
 
     public double longitude;
+
+    @Override
+    public String toString() {
+        return String.format("Nama barang %s, status upload %s", namaBarang, uploaded);
+    }
 }

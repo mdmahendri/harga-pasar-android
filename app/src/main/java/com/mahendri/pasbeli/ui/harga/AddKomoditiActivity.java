@@ -20,9 +20,8 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
 import com.mahendri.pasbeli.R;
-import com.mahendri.pasbeli.entity.HargaKomoditas;
+import com.mahendri.pasbeli.entity.HargaKonsumen;
 
 import java.util.Locale;
 
@@ -135,15 +134,15 @@ public class AddKomoditiActivity extends AppCompatActivity implements View.OnCli
             return;
         }
 
-        HargaKomoditas hargaKomoditas = new HargaKomoditas();
-        hargaKomoditas.namaKomoditas = namaText.getText().toString();
-        hargaKomoditas.hargaKomoditas = Long.parseLong(hargaText.getText().toString());
-        hargaKomoditas.namaTempat = namaTempatText.getText().toString();
-        hargaKomoditas.latitude = latitude;
-        hargaKomoditas.longitude = longitude;
-        hargaKomoditas.waktuCatat = System.currentTimeMillis();
+        HargaKonsumen hargaKonsumen = new HargaKonsumen();
+        hargaKonsumen.namaBarang = namaText.getText().toString();
+        hargaKonsumen.hargaBarang = Long.parseLong(hargaText.getText().toString());
+        hargaKonsumen.namaTempat = namaTempatText.getText().toString();
+        hargaKonsumen.latitude = latitude;
+        hargaKonsumen.longitude = longitude;
+        hargaKonsumen.waktuCatat = System.currentTimeMillis();
 
-        hargaViewModel.insertNewHargaKomoditas(hargaKomoditas);
+        hargaViewModel.insertNewHargaKomoditas(hargaKonsumen);
     }
 
     private void updateLocation() {

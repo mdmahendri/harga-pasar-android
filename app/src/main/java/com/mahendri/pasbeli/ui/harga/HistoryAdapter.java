@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mahendri.pasbeli.R;
-import com.mahendri.pasbeli.entity.HargaKomoditas;
+import com.mahendri.pasbeli.entity.HargaKonsumen;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -22,9 +22,9 @@ import java.util.Locale;
 
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.KomoditiHolder> {
 
-    private List<HargaKomoditas> data;
+    private List<HargaKonsumen> data;
 
-    HistoryAdapter(List<HargaKomoditas> data) {
+    HistoryAdapter(List<HargaKonsumen> data) {
         this.data = data;
     }
 
@@ -37,7 +37,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.Komoditi
 
     @Override
     public void onBindViewHolder(KomoditiHolder holder, int position) {
-        HargaKomoditas komoditi = data.get(position);
+        HargaKonsumen komoditi = data.get(position);
         holder.setData(komoditi);
     }
 
@@ -47,7 +47,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.Komoditi
         return data.size();
     }
 
-    void swapData(List<HargaKomoditas> newData) {
+    void swapData(List<HargaKonsumen> newData) {
         if (newData != null) {
             data = newData;
             notifyDataSetChanged();
@@ -67,11 +67,11 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.Komoditi
             timeText = itemView.findViewById(R.id.komoditi_waktu);
         }
 
-        void setData (HargaKomoditas hargaKomoditas) {
+        void setData (HargaKonsumen hargaKonsumen) {
             dataText.setText(String.format("mendata %s seharga Rp %s",
-                    hargaKomoditas.namaKomoditas, hargaKomoditas.hargaKomoditas));
-            locationText.setText(hargaKomoditas.namaTempat);
-            timeText.setText(convertStringDate(hargaKomoditas.waktuCatat));
+                    hargaKonsumen.namaBarang, hargaKonsumen.hargaBarang));
+            locationText.setText(hargaKonsumen.namaTempat);
+            timeText.setText(convertStringDate(hargaKonsumen.waktuCatat));
         }
 
         String convertStringDate(long time){

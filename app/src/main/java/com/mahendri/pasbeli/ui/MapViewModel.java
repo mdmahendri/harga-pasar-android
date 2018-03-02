@@ -15,6 +15,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.Completable;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -25,10 +28,8 @@ import retrofit2.Response;
 
 public class MapViewModel extends ViewModel {
 
-    private MapRepository mapRepository;
-    private HargaRepository hargaRepository;
-
-    private MutableLiveData<Resource<String>> uploadResponse = new MutableLiveData<>();
+    private final MapRepository mapRepository;
+    private final HargaRepository hargaRepository;
 
     @Inject
     MapViewModel(MapRepository mapRepository, HargaRepository hargaRepository) {
@@ -40,25 +41,7 @@ public class MapViewModel extends ViewModel {
         return mapRepository.getNearbyPasar(currentLoc);
     }
 
-    LiveData<Resource<String>> getUploadStatus() {
-        return uploadResponse;
-    }
-
-    void sendDataHarga() {
-        uploadResponse.setValue(Resource.loading(null));
-        hargaRepository.sendDataEntry().enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if (response.isSuccessful() && response.body() != null)
-                    uploadResponse.setValue(Resource.success(response.body()));
-                else
-                    uploadResponse.setValue(Resource.error("error HTTP response", null));
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                uploadResponse.setValue(Resource.error(t.getMessage(), null));
-            }
-        });
+    Completable sendDataHarga() {
+        return hargaRepository.sendDataEntry();
     }
 }

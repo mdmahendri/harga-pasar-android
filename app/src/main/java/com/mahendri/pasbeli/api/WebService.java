@@ -1,9 +1,10 @@
 package com.mahendri.pasbeli.api;
 
-import com.mahendri.pasbeli.entity.HargaKomoditas;
+import com.mahendri.pasbeli.entity.HargaKonsumen;
 
 import java.util.List;
 
+import io.reactivex.Completable;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
@@ -15,6 +16,6 @@ import retrofit2.http.POST;
 public interface WebService {
 
     @POST("api/harga")
-    Call<String> sendHargaBaru(@Body List<HargaKomoditas> daftarHarga);
+    Completable sendHargaBaru(@Body List<HargaKonsumen> daftarHarga);
 
 }

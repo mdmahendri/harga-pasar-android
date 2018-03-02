@@ -4,7 +4,7 @@
         <item>/gram</item>
     </string-array>
 
-    <string name="app_name">Harga Pasar</string>
+    <string name="app_name">Pasbeli</string>
     <string name="title_history">Riwayat</string>
     <string name="num_komoditas">%d komoditas</string>
     <string name="edit_place_name">Nama Tempat</string>

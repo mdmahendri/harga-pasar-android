@@ -1,7 +1,6 @@
 package com.mahendri.pasbeli.ui;
 
 import android.Manifest;
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
@@ -9,19 +8,16 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,11 +30,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+
 import com.mahendri.pasbeli.R;
-import com.mahendri.pasbeli.api.ApiResponse;
-import com.mahendri.pasbeli.entity.FetchStatus;
 import com.mahendri.pasbeli.entity.Pasar;
-import com.mahendri.pasbeli.entity.Resource;
 import com.mahendri.pasbeli.ui.harga.AddKomoditiActivity;
 import com.mahendri.pasbeli.ui.harga.DataHistoryActivity;
 import com.mahendri.pasbeli.util.DistanceConvert;
@@ -50,9 +44,9 @@ import java.util.List;
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity
@@ -61,11 +55,10 @@ public class MainActivity extends AppCompatActivity
 
     private static final int REQUEST_PERMISSION_LOCATION = 1;
 
-    @Inject
-    ViewModelProvider.Factory viewModelFactory;
+    private CompositeDisposable disposable;
 
     @Inject
-    ProgressBar progressBar;
+    ViewModelProvider.Factory viewModelFactory;
 
     @Inject
     FusedLocationProviderClient fusedLocationClient;
@@ -77,6 +70,7 @@ public class MainActivity extends AppCompatActivity
     private TextView locationText;
     private TextView distanceText;
     private BottomSheetBehavior bottomSheetBehavior;
+    private ProgressBar progressBar;
 
     private Location currentLocation;
     private GoogleMap map;
@@ -98,13 +92,13 @@ public class MainActivity extends AppCompatActivity
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.fragment_map);
         bottomSheetBehavior = BottomSheetBehavior.from(sheetLayout);
-
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        progressBar = findViewById(R.id.progress_bar);
+
         listKomoditasBtn.setOnClickListener(this);
         mapFragment.getMapAsync(this);
 
         mapViewModel = ViewModelProviders.of(this, viewModelFactory).get(MapViewModel.class);
-        setupProgressUpload();
     }
 
     @Override
@@ -120,7 +114,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(new Intent(this, DataHistoryActivity.class));
                 return true;
             case R.id.send_data:
-                mapViewModel.sendDataHarga();
+                sendDataHarga();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -135,8 +129,24 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+        subscribeData();
         if (map != null) checkMyLocationLayer();
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unsubscribeData();
+    }
+
+    private void subscribeData() {
+        disposable = new CompositeDisposable();
+    }
+
+    private void unsubscribeData() {
+        disposable.dispose();
+    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
@@ -158,7 +168,7 @@ public class MainActivity extends AppCompatActivity
         if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)) {
 
-            Snackbar.make(rootLayout, "Dibutuhkan akses lokasi untuk mendata komoditas",
+            Snackbar.make(rootLayout, "Dibutuhkan akses lokasi untuk mendata barang",
                     Snackbar.LENGTH_SHORT).setAction("OK", view -> {
                         // meminta permission
                         ActivityCompat.requestPermissions(MainActivity.this,
@@ -177,6 +187,7 @@ public class MainActivity extends AppCompatActivity
         if (ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
+            // tambahkan titik sekarang
             map.setMyLocationEnabled(true);
 
             // get lokasi sekarang
@@ -197,6 +208,7 @@ public class MainActivity extends AppCompatActivity
 
         mapViewModel.getMapNearby(currentLocation).observe(this, listResource -> {
             if (listResource != null && listResource.data != null) {
+                map.clear();
                 List<Pasar> daftarPasar = listResource.data;
                 placeMap = new HashMap<>(daftarPasar.size());
                 for (Pasar pasar : daftarPasar) {
@@ -206,23 +218,24 @@ public class MainActivity extends AppCompatActivity
                                     R.drawable.marker_market))
                             .title(pasar.nama);
                     Marker marker = map.addMarker(markerOptions);
-                    placeMap.put(marker.getId(), pasar);
+                    placeMap.put(marker.getTitle(), pasar);
                 }
+                Timber.i("Isi hashmap ada: %s", placeMap.size());
             }
         });
 
         // set listener klik pada marker
-        map.setOnMarkerClickListener(MainActivity.this);
+        map.setOnMarkerClickListener(this);
     }
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-
-        String uuid = marker.getId();
-        selectedPasar = placeMap.get(uuid);
-        setSheetValue(selectedPasar);
-
-        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        String id = marker.getTitle();
+        selectedPasar = placeMap.get(id);
+        if (selectedPasar != null) {
+            setSheetValue(selectedPasar);
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        }
         return false;
     }
 
@@ -246,7 +259,7 @@ public class MainActivity extends AppCompatActivity
 
     private void setSheetValue(Pasar pasar) {
 
-        // tidak tercatat lokasi sekarang
+        // tidak tercatat lokasi sekarang, lokasi sekarang dibutuhkan untuk menghitung jarak
         if (currentLocation == null) {
             checkMyLocationLayer();
             return;
@@ -255,30 +268,22 @@ public class MainActivity extends AppCompatActivity
         // bind text ke view
         titleText.setText(pasar.nama);
         locationText.setText(pasar.alamat);
-        distanceText.setText(String.format("%s KM", DistanceConvert.toKm(currentLocation,
-                pasar.getLocation())));
+        distanceText.setText(String.format("%s KM", DistanceConvert.toKm(currentLocation, pasar.getLocation())));
     }
 
-    private void setupProgressUpload() {
-        CoordinatorLayout.LayoutParams params = new CoordinatorLayout.LayoutParams(100, 100);
-        params.gravity = Gravity.CENTER;
-        rootLayout.addView(progressBar, params);
-
-        mapViewModel.getUploadStatus().observe(this, stringResource -> {
-            if (stringResource == null) return;
-
-            FetchStatus fetchStatus = stringResource.fetchStatus;
-            if (fetchStatus == FetchStatus.LOADING)
-                progressBar.setVisibility(View.VISIBLE);
-            else if (fetchStatus == FetchStatus.SUCCESS) {
-                progressBar.setVisibility(View.GONE);
-                Toast.makeText(MainActivity.this, "Sukses mengirim data",
-                        Toast.LENGTH_SHORT).show();
-            } else {
-                progressBar.setVisibility(View.GONE);
-                Toast.makeText(MainActivity.this, "Gagal mengirim data",
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
+    private void sendDataHarga() {
+        progressBar.setVisibility(View.VISIBLE);
+        disposable.add(mapViewModel.sendDataHarga()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> {
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(MainActivity.this, "Sukses mengirim data",
+                            Toast.LENGTH_SHORT).show();
+                }, throwable -> {
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(MainActivity.this, throwable.getMessage(),
+                            Toast.LENGTH_SHORT).show();
+                }));
     }
 }
