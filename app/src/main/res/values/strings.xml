@@ -1,16 +1,18 @@
 <resources>
     <string-array name="ukuran_array">
-        <item>/kg</item>
-        <item>/gram</item>
+        <item>Ukuran satuan barang</item>
+        <item>kilogram</item>
+        <item>gram</item>
+        <item>bungkus</item>
     </string-array>
 
     <string name="app_name">Pasbeli</string>
     <string name="title_history">Riwayat</string>
     <string name="num_komoditas">%d komoditas</string>
-    <string name="edit_place_name">Nama Tempat</string>
-    <string name="nama_komoditas">Nama Komoditas</string>
-    <string name="harga_komoditas">Harga Satuan</string>
-    <string name="location_now">Lokasi Sekarang</string>
-    <string name="kirim_hasil">Kirim Data</string>
+    <string name="edit_place_name">Nama tempat</string>
+    <string name="nama_komoditas">Nama barang</string>
+    <string name="harga_komoditas">Harga satuan</string>
+    <string name="location_now">Lokasi sekarang</string>
+    <string name="kirim_hasil">Kirim data</string>
 
 </resources>

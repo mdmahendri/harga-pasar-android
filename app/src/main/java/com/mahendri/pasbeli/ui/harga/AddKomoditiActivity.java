@@ -14,6 +14,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -33,7 +34,7 @@ public class AddKomoditiActivity extends AppCompatActivity implements View.OnCli
 
     private LocationCallback locationCallback;
 
-    private TextInputEditText namaText;
+    private AutoCompleteTextView namaText;
     private TextInputEditText hargaText;
     private TextInputEditText namaTempatText;
     private TextInputEditText locationText;
@@ -62,7 +63,7 @@ public class AddKomoditiActivity extends AppCompatActivity implements View.OnCli
         }
 
         setContentView(R.layout.activity_add_komoditi);
-        namaText = findViewById(R.id.text_nama_komoditas);
+        namaText = findViewById(R.id.text_nama_barang);
         hargaText = findViewById(R.id.text_harga);
         namaTempatText = findViewById(R.id.text_nama_tempat);
         locationText = findViewById(R.id.text_lat_lng);
@@ -91,6 +92,11 @@ public class AddKomoditiActivity extends AppCompatActivity implements View.OnCli
 
         hargaViewModel = ViewModelProviders.of(this, viewModelFactory)
                 .get(HargaViewModel.class);
+        initAutoComplete();
+    }
+
+    private void initAutoComplete() {
+        namaText.setAdapter();
     }
 
     @Override

@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 26
@@ -31,6 +32,9 @@ dependencies {
     implementation 'com.android.support:cardview-v7:26.1.0'
     implementation 'com.android.support:support-vector-drawable:26.1.0'
 
+    // kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+
     // google play service
     implementation 'com.google.android.gms:play-services-maps:11.8.0'
     implementation 'com.google.android.gms:play-services-location:11.8.0'
@@ -39,8 +43,9 @@ dependencies {
     // architecture component
     implementation 'android.arch.lifecycle:extensions:1.1.0'
     implementation 'android.arch.persistence.room:runtime:1.0.0'
+    implementation 'android.arch.persistence.room:rxjava2:1.0.0'
     annotationProcessor 'android.arch.lifecycle:compiler:1.1.0'
-    annotationProcessor 'android.arch.persistence.room:compiler:1.0.0'
+    kapt 'android.arch.persistence.room:compiler:1.0.0'
 
     // dagger 2
     implementation 'com.google.dagger:dagger:2.14.1'
