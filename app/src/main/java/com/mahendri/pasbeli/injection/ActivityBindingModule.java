@@ -2,7 +2,7 @@ package com.mahendri.pasbeli.injection;
 
 import com.mahendri.pasbeli.ui.MainActivity;
 import com.mahendri.pasbeli.ui.MainModule;
-import com.mahendri.pasbeli.ui.harga.AddKomoditiActivity;
+import com.mahendri.pasbeli.ui.harga.AddHargaActivity;
 import com.mahendri.pasbeli.ui.harga.DataHistoryActivity;
 
 import dagger.Module;
@@ -19,7 +19,7 @@ abstract class ActivityBindingModule {
     abstract MainActivity bindMainActivity();
 
     @ContributesAndroidInjector
-    abstract AddKomoditiActivity bindAddKomoditiActivity();
+    abstract AddHargaActivity bindAddKomoditiActivity();
 
     @ContributesAndroidInjector
     abstract DataHistoryActivity bindDataHistoryActivity();

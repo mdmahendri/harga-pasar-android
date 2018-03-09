@@ -16,8 +16,8 @@ public class HargaKonsumen {
     @ColumnInfo(name = "id_entry")
     public long idEntry;
 
-    @ColumnInfo(name = "nama_barang")
-    public String namaBarang;
+    @ColumnInfo(name = "id_barang")
+    public int idBarang;
 
     @ColumnInfo(name = "harga_barang")
     public long hargaBarang;
@@ -39,6 +39,6 @@ public class HargaKonsumen {
 
     @Override
     public String toString() {
-        return String.format("Nama barang %s, status upload %s", namaBarang, uploaded);
+        return String.format("Nama barang %s, status upload %s", idBarang, uploaded);
     }
 }

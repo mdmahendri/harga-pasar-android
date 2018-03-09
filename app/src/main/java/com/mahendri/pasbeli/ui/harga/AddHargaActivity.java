@@ -3,7 +3,6 @@ package com.mahendri.pasbeli.ui.harga;
 import android.Manifest;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -14,7 +13,10 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -22,7 +24,9 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.mahendri.pasbeli.R;
-import com.mahendri.pasbeli.entity.HargaKonsumen;
+import com.mahendri.pasbeli.entity.FetchStatus;
+import com.mahendri.pasbeli.util.AutoValidator;
+import com.mahendri.pasbeli.util.TextChangeWatch;
 
 import java.util.Locale;
 
@@ -30,11 +34,13 @@ import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
 
-public class AddKomoditiActivity extends AppCompatActivity implements View.OnClickListener {
+public class AddHargaActivity extends AppCompatActivity
+        implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     private LocationCallback locationCallback;
 
     private AutoCompleteTextView namaText;
+    private Spinner kualitasSpinner;
     private TextInputEditText hargaText;
     private TextInputEditText namaTempatText;
     private TextInputEditText locationText;
@@ -62,23 +68,20 @@ public class AddKomoditiActivity extends AppCompatActivity implements View.OnCli
             return;
         }
 
-        setContentView(R.layout.activity_add_komoditi);
+        setContentView(R.layout.activity_add_harga);
         namaText = findViewById(R.id.text_nama_barang);
+        kualitasSpinner = findViewById(R.id.spinner_kualitas);
         hargaText = findViewById(R.id.text_harga);
         namaTempatText = findViewById(R.id.text_nama_tempat);
         locationText = findViewById(R.id.text_lat_lng);
         permissionDialog = new AlertDialog.Builder(this)
                 .setTitle("Lokasi Dibutuhkan")
                 .setMessage("Lokasi diperlukan untuk mendata komoditas")
-                .setNeutralButton("Keluar", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        finish();
-                    }
-                })
+                .setNeutralButton("Keluar", (dialogInterface, i) -> finish())
                 .create();
         FloatingActionButton fab = findViewById(R.id.add_komoditi_fab);
 
+        kualitasSpinner.setEnabled(false);
         namaTempatText.setText(namaTempat);
         fab.setOnClickListener(this);
 
@@ -93,10 +96,46 @@ public class AddKomoditiActivity extends AppCompatActivity implements View.OnCli
         hargaViewModel = ViewModelProviders.of(this, viewModelFactory)
                 .get(HargaViewModel.class);
         initAutoComplete();
+        initSpinner();
     }
 
     private void initAutoComplete() {
-        namaText.setAdapter();
+
+        namaText.addTextChangedListener(new TextChangeWatch() {
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                hargaViewModel.changeKualitas(charSequence.toString());
+            }
+        });
+
+        hargaViewModel.getListBarang().observe(this, listResource -> {
+            if (listResource == null || listResource.fetchStatus == FetchStatus.LOADING) {
+                // empty implementation
+            } else if (listResource.fetchStatus == FetchStatus.ERROR) {
+                Toast.makeText(this, "Gagal mengambil data.", Toast.LENGTH_SHORT).show();
+                finish();
+            } else if (listResource.data != null && listResource.data.size() != 0) {
+                namaText.setAdapter(new ArrayAdapter<>(this,
+                        android.R.layout.simple_dropdown_item_1line, listResource.data));
+                namaText.setValidator(new AutoValidator(listResource.data));
+                namaText.setOnFocusChangeListener((view, focus) -> {
+                    if (!focus && view.getId() == namaText.getId()) namaText.performValidation();
+                });
+            }
+        });
+    }
+
+    private void initSpinner() {
+        kualitasSpinner.setOnItemSelectedListener(this);
+
+        hargaViewModel.getKualitas().observe(this, listString -> {
+            if (listString != null && listString.size() != 0) {
+                kualitasSpinner.setEnabled(true);
+                kualitasSpinner.setAdapter(new ArrayAdapter<>(this,
+                        android.R.layout.simple_spinner_dropdown_item, listString));
+            } else
+                kualitasSpinner.setAdapter(null);
+        });
     }
 
     @Override
@@ -140,15 +179,8 @@ public class AddKomoditiActivity extends AppCompatActivity implements View.OnCli
             return;
         }
 
-        HargaKonsumen hargaKonsumen = new HargaKonsumen();
-        hargaKonsumen.namaBarang = namaText.getText().toString();
-        hargaKonsumen.hargaBarang = Long.parseLong(hargaText.getText().toString());
-        hargaKonsumen.namaTempat = namaTempatText.getText().toString();
-        hargaKonsumen.latitude = latitude;
-        hargaKonsumen.longitude = longitude;
-        hargaKonsumen.waktuCatat = System.currentTimeMillis();
-
-        hargaViewModel.insertNewHargaKomoditas(hargaKonsumen);
+        hargaViewModel.insertNewHarga(Long.parseLong(hargaText.getText().toString()),
+                namaTempatText.getText().toString(), latitude, longitude);
     }
 
     private void updateLocation() {
@@ -173,5 +205,16 @@ public class AddKomoditiActivity extends AppCompatActivity implements View.OnCli
 
             fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
         }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+        String selected = adapterView.getItemAtPosition(position).toString();
+        hargaViewModel.selectBarang(selected);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 }

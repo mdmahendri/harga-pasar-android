@@ -33,7 +33,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import com.mahendri.pasbeli.R;
 import com.mahendri.pasbeli.entity.Pasar;
-import com.mahendri.pasbeli.ui.harga.AddKomoditiActivity;
+import com.mahendri.pasbeli.ui.harga.AddHargaActivity;
 import com.mahendri.pasbeli.ui.harga.DataHistoryActivity;
 import com.mahendri.pasbeli.util.DistanceConvert;
 import com.mahendri.pasbeli.util.VectorBitmapConvert;
@@ -250,7 +250,7 @@ public class MainActivity extends AppCompatActivity
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.place_button:
-                Intent toAdd = new Intent(this, AddKomoditiActivity.class);
+                Intent toAdd = new Intent(this, AddHargaActivity.class);
                 toAdd.putExtra("LOC_NAME", selectedPasar.nama);
                 startActivity(toAdd);
                 break;

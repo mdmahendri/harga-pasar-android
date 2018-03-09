@@ -11,6 +11,7 @@ import com.google.gson.GsonBuilder;
 import com.mahendri.pasbeli.BuildConfig;
 import com.mahendri.pasbeli.api.GoogleMapService;
 import com.mahendri.pasbeli.api.WebService;
+import com.mahendri.pasbeli.database.BarangDao;
 import com.mahendri.pasbeli.database.HargaDao;
 import com.mahendri.pasbeli.database.PasBeliDb;
 import com.mahendri.pasbeli.database.PasarDao;
@@ -84,6 +85,11 @@ class AppModule {
     @Singleton @Provides
     PasarDao providePasarDao(PasBeliDb pasBeliDb) {
         return pasBeliDb.pasarDao();
+    }
+
+    @Singleton @Provides
+    BarangDao provideBarangDao(PasBeliDb pasBeliDb) {
+        return pasBeliDb.barangDao();
     }
 
     @Singleton @Provides

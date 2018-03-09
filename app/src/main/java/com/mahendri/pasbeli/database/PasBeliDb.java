@@ -16,5 +16,6 @@ public abstract class PasBeliDb extends RoomDatabase {
 
     public abstract HargaDao hargaKomoditasDao();
     public abstract PasarDao pasarDao();
+    public abstract BarangDao barangDao();
 
 }

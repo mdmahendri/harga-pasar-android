@@ -69,7 +69,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.Komoditi
 
         void setData (HargaKonsumen hargaKonsumen) {
             dataText.setText(String.format("mendata %s seharga Rp %s",
-                    hargaKonsumen.namaBarang, hargaKonsumen.hargaBarang));
+                    hargaKonsumen.idBarang, hargaKonsumen.hargaBarang));
             locationText.setText(hargaKonsumen.namaTempat);
             timeText.setText(convertStringDate(hargaKonsumen.waktuCatat));
         }
