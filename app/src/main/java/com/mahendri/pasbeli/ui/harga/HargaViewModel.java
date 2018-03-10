@@ -40,10 +40,6 @@ public class HargaViewModel extends ViewModel {
         this.repository = repository;
     }
 
-    LiveData<List<HargaKonsumen>> getListHargaKomoditas() {
-        return repository.getAllKomoditas();
-    }
-
     LiveData<Resource<List<String>>> getListBarang() {;
         return Transformations.map(repository.getAllBarang(), resourceList -> {
             ArrayList<String> namaList = new ArrayList<>();

@@ -1,4 +1,4 @@
-package com.mahendri.pasbeli.ui.harga;
+package com.mahendri.pasbeli.ui.history;
 
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.mahendri.pasbeli.R;
+import com.mahendri.pasbeli.ui.harga.HargaViewModel;
 
 import javax.inject.Inject;
 
@@ -18,7 +19,7 @@ public class DataHistoryActivity extends AppCompatActivity {
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
-    HargaViewModel hargaViewModel;
+    HistoryViewModel hargaViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +34,7 @@ public class DataHistoryActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         hargaViewModel = ViewModelProviders.of(this, viewModelFactory)
-                .get(HargaViewModel.class);
-        hargaViewModel.getListHargaKomoditas().observe(this, adapter::swapData);
+                .get(HistoryViewModel.class);
+        hargaViewModel.getListHarga().observe(this, adapter::swapData);
     }
 }

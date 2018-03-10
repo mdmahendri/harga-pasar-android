@@ -34,7 +34,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.mahendri.pasbeli.R;
 import com.mahendri.pasbeli.entity.Pasar;
 import com.mahendri.pasbeli.ui.harga.AddHargaActivity;
-import com.mahendri.pasbeli.ui.harga.DataHistoryActivity;
+import com.mahendri.pasbeli.ui.history.DataHistoryActivity;
 import com.mahendri.pasbeli.util.DistanceConvert;
 import com.mahendri.pasbeli.util.VectorBitmapConvert;
 

@@ -35,7 +35,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.mahendri.pasbeli.ui.harga.DataHistoryActivity" />
+        <activity android:name="com.mahendri.pasbeli.ui.history.DataHistoryActivity" />
         <activity android:name="com.mahendri.pasbeli.ui.harga.AddHargaActivity"
             android:windowSoftInputMode="adjustResize"/>
     </application>

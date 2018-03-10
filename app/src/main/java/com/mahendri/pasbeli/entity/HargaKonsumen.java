@@ -19,8 +19,8 @@ public class HargaKonsumen {
     @ColumnInfo(name = "id_barang")
     public int idBarang;
 
-    @ColumnInfo(name = "harga_barang")
-    public long hargaBarang;
+    @ColumnInfo(name = "harga")
+    public long harga;
 
     @ColumnInfo(name = "waktu_catat")
     public long waktuCatat;

@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProvider;
 
 import com.mahendri.pasbeli.ui.MapViewModel;
 import com.mahendri.pasbeli.ui.harga.HargaViewModel;
+import com.mahendri.pasbeli.ui.history.HistoryViewModel;
 import com.mahendri.pasbeli.viewmodel.PasBeliViewModelFactory;
 
 import dagger.Binds;
@@ -27,6 +28,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(MapViewModel.class)
     abstract ViewModel bindMapViewModel(MapViewModel mapViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(HistoryViewModel.class)
+    abstract ViewModel bindHistoryViewModel (HistoryViewModel historyViewModel);
 
     @Binds
     abstract ViewModelProvider.Factory bindViewModelFactory(PasBeliViewModelFactory factory);

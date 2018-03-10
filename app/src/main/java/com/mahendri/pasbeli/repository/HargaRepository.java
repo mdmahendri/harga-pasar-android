@@ -11,6 +11,7 @@ import com.mahendri.pasbeli.database.BarangDao;
 import com.mahendri.pasbeli.database.HargaDao;
 import com.mahendri.pasbeli.database.PasBeliDb;
 import com.mahendri.pasbeli.entity.Barang;
+import com.mahendri.pasbeli.entity.BarangHarga;
 import com.mahendri.pasbeli.entity.HargaKonsumen;
 import com.mahendri.pasbeli.entity.Resource;
 
@@ -36,7 +37,7 @@ public class HargaRepository {
     private final WebService webService;
 
     @Inject
-    public HargaRepository(HargaDao hargaDao, PasBeliDb pasBeliDb, BarangDao barangDao,
+    HargaRepository(HargaDao hargaDao, PasBeliDb pasBeliDb, BarangDao barangDao,
                            WebService webService, AppExecutors appExecutors) {
         this.appExecutors = appExecutors;
         this.pasBeliDb = pasBeliDb;
@@ -45,8 +46,8 @@ public class HargaRepository {
         this.webService = webService;
     }
 
-    public LiveData<List<HargaKonsumen>> getAllKomoditas() {
-        return hargaDao.loadHargaKomoditasList();
+    public LiveData<List<BarangHarga>> getCatatan() {
+        return hargaDao.loadCatatanHarga();
     }
 
     public LiveData<Resource<List<Barang>>> getAllBarang() {
@@ -94,7 +95,7 @@ public class HargaRepository {
     public void insertNewEntry(int idBarang,long harga,String namaTempat,double latitude,double longitude) {
         HargaKonsumen hargaKonsumen = new HargaKonsumen();
         hargaKonsumen.idBarang = idBarang;
-        hargaKonsumen.hargaBarang = harga;
+        hargaKonsumen.harga = harga;
         hargaKonsumen.namaTempat = namaTempat;
         hargaKonsumen.latitude = latitude;
         hargaKonsumen.longitude = longitude;
@@ -104,11 +105,16 @@ public class HargaRepository {
     }
 
     public Completable sendDataEntry() {
-        return Maybe.fromCallable(hargaDao::getUnsendDataHarga).flatMapCompletable(hargaKonsumen -> {
-            Timber.i("array ada isinya: %s", hargaKonsumen != null && hargaKonsumen.size() != 0);
-            if (hargaKonsumen == null || hargaKonsumen.size() == 0 )
-                throw new Exception("Daftar entri kosong.");
-            else return webService.sendHargaBaru(hargaKonsumen);
-        }).doOnComplete(hargaDao::updateHarga);
+        return Maybe
+                .fromCallable(hargaDao::getUnsendDataHarga)
+                .flatMapCompletable(hargaKonsumen -> {
+                    Timber.i("array ada isinya: %s", hargaKonsumen != null
+                            && hargaKonsumen.size() != 0);
+                    if (hargaKonsumen == null || hargaKonsumen.size() == 0 )
+                        throw new Exception("Daftar entri kosong.");
+                    else
+                        return webService.sendHargaBaru(hargaKonsumen);
+                })
+                .doOnComplete(hargaDao::updateHarga);
     }
 }

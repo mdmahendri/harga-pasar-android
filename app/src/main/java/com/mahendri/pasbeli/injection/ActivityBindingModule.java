@@ -3,7 +3,7 @@ package com.mahendri.pasbeli.injection;
 import com.mahendri.pasbeli.ui.MainActivity;
 import com.mahendri.pasbeli.ui.MainModule;
 import com.mahendri.pasbeli.ui.harga.AddHargaActivity;
-import com.mahendri.pasbeli.ui.harga.DataHistoryActivity;
+import com.mahendri.pasbeli.ui.history.DataHistoryActivity;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;

@@ -1,4 +1,4 @@
-package com.mahendri.pasbeli.ui.harga;
+package com.mahendri.pasbeli.ui.history;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mahendri.pasbeli.R;
+import com.mahendri.pasbeli.entity.BarangHarga;
 import com.mahendri.pasbeli.entity.HargaKonsumen;
 
 import java.text.SimpleDateFormat;
@@ -20,25 +21,25 @@ import java.util.Locale;
  * @author Mahendri Dwicahyo
  */
 
-public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.KomoditiHolder> {
+public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryHolder> {
 
-    private List<HargaKonsumen> data;
+    private List<BarangHarga> data;
 
-    HistoryAdapter(List<HargaKonsumen> data) {
+    HistoryAdapter(List<BarangHarga> data) {
         this.data = data;
     }
 
     @Override
-    public KomoditiHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public HistoryHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         View v = LayoutInflater.from(context).inflate(R.layout.item_komoditi, parent, false);
-        return new KomoditiHolder(v);
+        return new HistoryHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(KomoditiHolder holder, int position) {
-        HargaKonsumen komoditi = data.get(position);
-        holder.setData(komoditi);
+    public void onBindViewHolder(HistoryHolder holder, int position) {
+        BarangHarga barang = data.get(position);
+        holder.setData(barang);
     }
 
     @Override
@@ -47,31 +48,31 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.Komoditi
         return data.size();
     }
 
-    void swapData(List<HargaKonsumen> newData) {
+    void swapData(List<BarangHarga> newData) {
         if (newData != null) {
             data = newData;
             notifyDataSetChanged();
         }
     }
 
-    class KomoditiHolder extends RecyclerView.ViewHolder {
+    class HistoryHolder extends RecyclerView.ViewHolder {
 
         private TextView dataText;
         private TextView locationText;
         private TextView timeText;
 
-        KomoditiHolder(View itemView) {
+        HistoryHolder(View itemView) {
             super(itemView);
             dataText = itemView.findViewById(R.id.komoditi_data);
             locationText = itemView.findViewById(R.id.komoditi_tempat);
             timeText = itemView.findViewById(R.id.komoditi_waktu);
         }
 
-        void setData (HargaKonsumen hargaKonsumen) {
-            dataText.setText(String.format("mendata %s seharga Rp %s",
-                    hargaKonsumen.idBarang, hargaKonsumen.hargaBarang));
-            locationText.setText(hargaKonsumen.namaTempat);
-            timeText.setText(convertStringDate(hargaKonsumen.waktuCatat));
+        void setData (BarangHarga barangHarga) {
+            dataText.setText(String.format("Mendata %s seharga Rp %s",
+                    barangHarga.getNama(), barangHarga.getHarga()));
+            locationText.setText(barangHarga.getNamaTempat());
+            timeText.setText(convertStringDate(barangHarga.getWaktuCatat()));
         }
 
         String convertStringDate(long time){
