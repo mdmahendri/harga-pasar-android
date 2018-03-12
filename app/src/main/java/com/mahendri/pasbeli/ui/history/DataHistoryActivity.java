@@ -8,7 +8,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.mahendri.pasbeli.R;
-import com.mahendri.pasbeli.ui.harga.HargaViewModel;
 
 import javax.inject.Inject;
 
@@ -26,7 +25,7 @@ public class DataHistoryActivity extends AppCompatActivity {
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_komoditi_list);
+        setContentView(R.layout.activity_history_data);
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         final HistoryAdapter adapter = new HistoryAdapter(null);
 

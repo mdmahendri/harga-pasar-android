@@ -4,7 +4,7 @@ import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.mahendri.pasbeli.AppExecutors;
+import com.mahendri.pasbeli.viewmodel.AppExecutors;
 import com.mahendri.pasbeli.api.ApiResponse;
 import com.mahendri.pasbeli.api.WebService;
 import com.mahendri.pasbeli.database.BarangDao;

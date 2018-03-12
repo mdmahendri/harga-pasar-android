@@ -5,7 +5,7 @@ import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.mahendri.pasbeli.AppExecutors;
+import com.mahendri.pasbeli.viewmodel.AppExecutors;
 import com.mahendri.pasbeli.api.ApiResponse;
 import com.mahendri.pasbeli.api.GoogleMapService;
 import com.mahendri.pasbeli.api.map.PlaceNearbyResponse;
@@ -20,11 +20,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import timber.log.Timber;
 
 /**
  * @author Mahendri

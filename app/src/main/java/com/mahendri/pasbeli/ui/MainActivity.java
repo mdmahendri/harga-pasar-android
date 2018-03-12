@@ -5,20 +5,18 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.databinding.DataBindingUtil;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -32,13 +30,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import com.mahendri.pasbeli.R;
+import com.mahendri.pasbeli.databinding.ActivityMainBinding;
 import com.mahendri.pasbeli.entity.Pasar;
 import com.mahendri.pasbeli.ui.harga.AddHargaActivity;
 import com.mahendri.pasbeli.ui.history.DataHistoryActivity;
-import com.mahendri.pasbeli.util.DistanceConvert;
 import com.mahendri.pasbeli.util.VectorBitmapConvert;
 
-import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -50,8 +47,7 @@ import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity
-        implements OnMapReadyCallback, OnSuccessListener<Location>,
-        GoogleMap.OnMarkerClickListener, View.OnClickListener {
+        implements OnMapReadyCallback, OnSuccessListener<Location>, GoogleMap.OnMarkerClickListener {
 
     private static final int REQUEST_PERMISSION_LOCATION = 1;
 
@@ -63,42 +59,27 @@ public class MainActivity extends AppCompatActivity
     @Inject
     FusedLocationProviderClient fusedLocationClient;
 
-    MapViewModel mapViewModel;
+    MainViewModel mainViewModel;
+    ActivityMainBinding binding;
 
-    private CoordinatorLayout rootLayout;
-    private TextView titleText;
-    private TextView locationText;
-    private TextView distanceText;
     private BottomSheetBehavior bottomSheetBehavior;
     private ProgressBar progressBar;
 
     private Location currentLocation;
     private GoogleMap map;
-    private Pasar selectedPasar;
-    private HashMap<String, Pasar> placeMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        mainViewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel.class);
+        binding.setViewmodel(mainViewModel);
 
-        rootLayout = findViewById(R.id.root_layout);
-        View sheetLayout = findViewById(R.id.bottom_sheet);
-        titleText = sheetLayout.findViewById(R.id.place_title);
-        locationText = sheetLayout.findViewById(R.id.place_address);
-        distanceText = sheetLayout.findViewById(R.id.place_distance);
-        Button listKomoditasBtn = sheetLayout.findViewById(R.id.place_button);
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.fragment_map);
-        bottomSheetBehavior = BottomSheetBehavior.from(sheetLayout);
-        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         progressBar = findViewById(R.id.progress_bar);
-
-        listKomoditasBtn.setOnClickListener(this);
-        mapFragment.getMapAsync(this);
-
-        mapViewModel = ViewModelProviders.of(this, viewModelFactory).get(MapViewModel.class);
+        setupGoogleMap();
+        setupSheet(binding);
+        setupEventListener();
     }
 
     @Override
@@ -147,7 +128,6 @@ public class MainActivity extends AppCompatActivity
         disposable.dispose();
     }
 
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
@@ -168,7 +148,7 @@ public class MainActivity extends AppCompatActivity
         if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)) {
 
-            Snackbar.make(rootLayout, "Dibutuhkan akses lokasi untuk mendata barang",
+            Snackbar.make(binding.rootLayout, "Dibutuhkan akses lokasi untuk mendata barang",
                     Snackbar.LENGTH_SHORT).setAction("OK", view -> {
                         // meminta permission
                         ActivityCompat.requestPermissions(MainActivity.this,
@@ -202,27 +182,13 @@ public class MainActivity extends AppCompatActivity
             Timber.w("tidak dapat lokasi padahal setMyLocationEnabled true");
             return;
         }
+
         currentLocation = location;
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(),
                 location.getLongitude()), 15));
 
-        mapViewModel.getMapNearby(currentLocation).observe(this, listResource -> {
-            if (listResource != null && listResource.data != null) {
-                map.clear();
-                List<Pasar> daftarPasar = listResource.data;
-                placeMap = new HashMap<>(daftarPasar.size());
-                for (Pasar pasar : daftarPasar) {
-                    MarkerOptions markerOptions = new MarkerOptions()
-                            .position(pasar.getLocation())
-                            .icon(VectorBitmapConvert.fromVector(MainActivity.this,
-                                    R.drawable.marker_market))
-                            .title(pasar.nama);
-                    Marker marker = map.addMarker(markerOptions);
-                    placeMap.put(marker.getTitle(), pasar);
-                }
-                Timber.i("Isi hashmap ada: %s", placeMap.size());
-            }
-        });
+        // draw marker
+        setupMarker();
 
         // set listener klik pada marker
         map.setOnMarkerClickListener(this);
@@ -230,12 +196,15 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        String id = marker.getTitle();
-        selectedPasar = placeMap.get(id);
-        if (selectedPasar != null) {
-            setSheetValue(selectedPasar);
+        Pasar selectedPasar = (Pasar) marker.getTag();
+
+        // lokasi sekarang dibutuhkan untuk menghitung jarak
+        if (selectedPasar != null && currentLocation != null) {
+            mainViewModel.openSheet(currentLocation, selectedPasar);
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-        }
+        } else
+            checkMyLocationLayer();
+
         return false;
     }
 
@@ -246,34 +215,9 @@ public class MainActivity extends AppCompatActivity
         } else super.onBackPressed();
     }
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.place_button:
-                Intent toAdd = new Intent(this, AddHargaActivity.class);
-                toAdd.putExtra("LOC_NAME", selectedPasar.nama);
-                startActivity(toAdd);
-                break;
-        }
-    }
-
-    private void setSheetValue(Pasar pasar) {
-
-        // tidak tercatat lokasi sekarang, lokasi sekarang dibutuhkan untuk menghitung jarak
-        if (currentLocation == null) {
-            checkMyLocationLayer();
-            return;
-        }
-
-        // bind text ke view
-        titleText.setText(pasar.nama);
-        locationText.setText(pasar.alamat);
-        distanceText.setText(String.format("%s KM", DistanceConvert.toKm(currentLocation, pasar.getLocation())));
-    }
-
     private void sendDataHarga() {
         progressBar.setVisibility(View.VISIBLE);
-        disposable.add(mapViewModel.sendDataHarga()
+        disposable.add(mainViewModel.sendDataHarga()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {
@@ -285,5 +229,42 @@ public class MainActivity extends AppCompatActivity
                     Toast.makeText(MainActivity.this, throwable.getMessage(),
                             Toast.LENGTH_SHORT).show();
                 }));
+    }
+
+    private void setupGoogleMap() {
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.fragment_map);
+        mapFragment.getMapAsync(this);
+    }
+
+    private void setupEventListener() {
+        mainViewModel.getAddNewEvent().observe(this, namaPasar -> {
+            Intent intent = new Intent(this, AddHargaActivity.class);
+            intent.putExtra(AddHargaActivity.EXTRA_NAMA_PASAR, namaPasar);
+            startActivity(intent);
+        });
+    }
+
+    private void setupMarker() {
+        mainViewModel.getMapNearby(currentLocation).observe(this, listResource -> {
+            if (listResource == null || listResource.data == null) return;
+
+            map.clear();
+            List<Pasar> daftarPasar = listResource.data;
+            for (Pasar pasar : daftarPasar) {
+                MarkerOptions markerOptions = new MarkerOptions()
+                        .position(pasar.getLocation())
+                        .icon(VectorBitmapConvert.fromVector(MainActivity.this,
+                                R.drawable.marker_market))
+                        .title(pasar.nama);
+                Marker marker = map.addMarker(markerOptions);
+                marker.setTag(pasar);
+            }
+        });
+    }
+
+    private void setupSheet(ActivityMainBinding binding) {
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheet);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
     }
 }

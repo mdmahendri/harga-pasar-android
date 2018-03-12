@@ -19,7 +19,7 @@ abstract class ActivityBindingModule {
     abstract MainActivity bindMainActivity();
 
     @ContributesAndroidInjector
-    abstract AddHargaActivity bindAddKomoditiActivity();
+    abstract AddHargaActivity bindAddHargaActivity();
 
     @ContributesAndroidInjector
     abstract DataHistoryActivity bindDataHistoryActivity();

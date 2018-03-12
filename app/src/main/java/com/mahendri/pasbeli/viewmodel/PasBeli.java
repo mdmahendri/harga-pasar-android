@@ -1,8 +1,9 @@
-package com.mahendri.pasbeli;
+package com.mahendri.pasbeli.viewmodel;
 
 import android.app.Activity;
 import android.app.Application;
 
+import com.mahendri.pasbeli.BuildConfig;
 import com.mahendri.pasbeli.injection.AppInjector;
 
 import javax.inject.Inject;

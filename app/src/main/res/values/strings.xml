@@ -14,5 +14,6 @@
     <string name="harga_komoditas">Harga satuan</string>
     <string name="location_now">Lokasi sekarang</string>
     <string name="kirim_hasil">Kirim data</string>
+    <string name="add_data">Tambahkan data</string>
 
 </resources>

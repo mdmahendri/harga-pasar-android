@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.mahendri.pasbeli.util;
+package com.mahendri.pasbeli.viewmodel;
 
 import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;

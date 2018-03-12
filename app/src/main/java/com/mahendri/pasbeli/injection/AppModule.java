@@ -16,7 +16,7 @@ import com.mahendri.pasbeli.database.HargaDao;
 import com.mahendri.pasbeli.database.PasBeliDb;
 import com.mahendri.pasbeli.database.PasarDao;
 import com.mahendri.pasbeli.preference.Constants;
-import com.mahendri.pasbeli.util.LiveDataCallAdapterFactory;
+import com.mahendri.pasbeli.viewmodel.LiveDataCallAdapterFactory;
 
 import javax.inject.Singleton;
 

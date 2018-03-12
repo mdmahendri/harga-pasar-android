@@ -3,7 +3,7 @@ package com.mahendri.pasbeli.injection;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 
-import com.mahendri.pasbeli.ui.MapViewModel;
+import com.mahendri.pasbeli.ui.MainViewModel;
 import com.mahendri.pasbeli.ui.harga.HargaViewModel;
 import com.mahendri.pasbeli.ui.history.HistoryViewModel;
 import com.mahendri.pasbeli.viewmodel.PasBeliViewModelFactory;
@@ -26,8 +26,8 @@ abstract class ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(MapViewModel.class)
-    abstract ViewModel bindMapViewModel(MapViewModel mapViewModel);
+    @ViewModelKey(MainViewModel.class)
+    abstract ViewModel bindMainViewModel(MainViewModel mainViewModel);
 
     @Binds
     @IntoMap

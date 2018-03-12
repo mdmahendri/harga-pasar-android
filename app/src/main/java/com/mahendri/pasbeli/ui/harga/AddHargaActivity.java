@@ -37,6 +37,8 @@ import dagger.android.AndroidInjection;
 public class AddHargaActivity extends AppCompatActivity
         implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
+    public static final String EXTRA_NAMA_PASAR = "NAMA_PASAR";
+
     private LocationCallback locationCallback;
 
     private AutoCompleteTextView namaText;
@@ -62,7 +64,7 @@ public class AddHargaActivity extends AppCompatActivity
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
 
-        String namaTempat = getIntent().getStringExtra("LOC_NAME");
+        String namaTempat = getIntent().getStringExtra(EXTRA_NAMA_PASAR);
         if (namaTempat == null) {
             finish();
             return;
