@@ -1,4 +1,4 @@
-package com.mahendri.pasbeli.ui.harga;
+package com.mahendri.pasbeli.ui.addharga;
 
 import android.Manifest;
 import android.arch.lifecycle.ViewModelProvider;

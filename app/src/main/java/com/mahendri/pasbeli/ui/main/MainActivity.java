@@ -1,4 +1,4 @@
-package com.mahendri.pasbeli.ui;
+package com.mahendri.pasbeli.ui.main;
 
 import android.Manifest;
 import android.arch.lifecycle.ViewModelProvider;
@@ -32,7 +32,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.mahendri.pasbeli.R;
 import com.mahendri.pasbeli.databinding.ActivityMainBinding;
 import com.mahendri.pasbeli.entity.Pasar;
-import com.mahendri.pasbeli.ui.harga.AddHargaActivity;
+import com.mahendri.pasbeli.ui.addharga.AddHargaActivity;
 import com.mahendri.pasbeli.ui.history.DataHistoryActivity;
 import com.mahendri.pasbeli.util.VectorBitmapConvert;
 

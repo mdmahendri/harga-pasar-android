@@ -5,16 +5,13 @@ import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.mahendri.pasbeli.api.WebService;
 import com.mahendri.pasbeli.viewmodel.AppExecutors;
 import com.mahendri.pasbeli.api.ApiResponse;
-import com.mahendri.pasbeli.api.GoogleMapService;
-import com.mahendri.pasbeli.api.map.PlaceNearbyResponse;
-import com.mahendri.pasbeli.api.map.PlaceResult;
 import com.mahendri.pasbeli.database.PasBeliDb;
 import com.mahendri.pasbeli.database.PasarDao;
 import com.mahendri.pasbeli.entity.Pasar;
 import com.mahendri.pasbeli.entity.Resource;
-import com.mahendri.pasbeli.preference.Constants;
 
 import java.util.List;
 
@@ -31,26 +28,26 @@ public class MapRepository {
     private final AppExecutors appExecutors;
     private final PasBeliDb pasBeliDb;
     private final PasarDao pasarDao;
-    private final GoogleMapService googleMapService;
+    private final WebService webService;
 
     @Inject
     MapRepository(AppExecutors appExecutors, PasBeliDb pasBeliDb, PasarDao pasarDao,
-                  GoogleMapService googleMapService) {
+                  WebService webService) {
         this.appExecutors = appExecutors;
         this.pasBeliDb = pasBeliDb;
         this.pasarDao = pasarDao;
-        this.googleMapService = googleMapService;
+        this.webService = webService;
     }
 
     public LiveData<Resource<List<Pasar>>> getNearbyPasar(Location location) {
-        return new NetworkBoundResource<List<Pasar>, PlaceNearbyResponse>(appExecutors) {
+        return new NetworkBoundResource<List<Pasar>, List<Pasar>>(appExecutors) {
 
             @Override
-            protected void saveCallResult(@NonNull PlaceNearbyResponse item) {
+            protected void saveCallResult(@NonNull List<Pasar> item) {
                 pasBeliDb.beginTransaction();
                 try {
-                    for(PlaceResult place : item.getResults())
-                        pasarDao.insertPasar(new Pasar(place));
+                    for(Pasar pasar : item)
+                        pasarDao.insertPasar(pasar);
                     pasBeliDb.setTransactionSuccessful();
                 } finally {
                     pasBeliDb.endTransaction();
@@ -59,7 +56,7 @@ public class MapRepository {
 
             @Override
             protected boolean shouldFetch(@Nullable List<Pasar> data) {
-                return data == null || data.size() < 20;
+                return data == null || data.size() < 1;
             }
 
             @NonNull
@@ -70,10 +67,10 @@ public class MapRepository {
 
             @NonNull
             @Override
-            protected LiveData<ApiResponse<PlaceNearbyResponse>> createCall() {
+            protected LiveData<ApiResponse<List<Pasar>>> createCall() {
                 String locationString = String.format("%s,%s", location.getLatitude(),
                         location.getLongitude());
-                return googleMapService.listNearbyMarket(Constants.GOOGLE_API_KEY, locationString);
+                return webService.fetchPasarNear(locationString);
             }
 
         }.asLiveData();

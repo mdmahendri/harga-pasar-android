@@ -9,7 +9,6 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mahendri.pasbeli.BuildConfig;
-import com.mahendri.pasbeli.api.GoogleMapService;
 import com.mahendri.pasbeli.api.WebService;
 import com.mahendri.pasbeli.database.BarangDao;
 import com.mahendri.pasbeli.database.HargaDao;
@@ -34,16 +33,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 @Module(includes = {ViewModelModule.class})
 class AppModule {
-
-    @Singleton @Provides
-    GoogleMapService provideMapService() {
-        return new Retrofit.Builder()
-                .baseUrl(Constants.MAP_WEB_SERVICE)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(new LiveDataCallAdapterFactory())
-                .build()
-                .create(GoogleMapService.class);
-    }
 
     @Singleton @Provides
     WebService provideWebService() {

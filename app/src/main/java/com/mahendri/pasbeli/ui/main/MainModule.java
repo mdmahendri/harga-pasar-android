@@ -1,4 +1,4 @@
-package com.mahendri.pasbeli.ui;
+package com.mahendri.pasbeli.ui.main;
 
 import android.widget.ProgressBar;
 

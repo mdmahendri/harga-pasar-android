@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData;
 
 import com.mahendri.pasbeli.entity.Barang;
 import com.mahendri.pasbeli.entity.HargaKonsumen;
+import com.mahendri.pasbeli.entity.Pasar;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 /**
  * @author Mahendri
@@ -19,9 +21,12 @@ import retrofit2.http.POST;
 
 public interface WebService {
 
-    @POST("api/harga")
+    @POST("harga")
     Completable sendHargaBaru(@Body List<HargaKonsumen> daftarHarga);
 
-    @GET("api/barang")
+    @GET("barang")
     LiveData<ApiResponse<List<Barang>>> fetchListBarang();
+
+    @GET("pasar/{location}")
+    LiveData<ApiResponse<List<Pasar>>> fetchPasarNear(@Path("location") String locationString);
 }

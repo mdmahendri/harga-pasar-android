@@ -1,4 +1,4 @@
-package com.mahendri.pasbeli.ui.harga;
+package com.mahendri.pasbeli.ui.addharga;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
@@ -7,7 +7,6 @@ import android.arch.lifecycle.ViewModel;
 
 import com.mahendri.pasbeli.entity.Barang;
 import com.mahendri.pasbeli.entity.FetchStatus;
-import com.mahendri.pasbeli.entity.HargaKonsumen;
 import com.mahendri.pasbeli.entity.Resource;
 import com.mahendri.pasbeli.repository.HargaRepository;
 
