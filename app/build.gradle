@@ -31,6 +31,7 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "com.android.support.constraint:constraint-layout:$rootProject.constraintVersion"
     implementation "com.android.support:appcompat-v7:$rootProject.supportLibVersion"
     implementation "com.android.support:design:$rootProject.supportLibVersion"
     implementation "com.android.support:cardview-v7:$rootProject.supportLibVersion"
@@ -48,7 +49,6 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:$rootProject.lifecycleVersion"
     implementation "android.arch.persistence.room:runtime:$rootProject.roomVersion"
     implementation "android.arch.persistence.room:rxjava2:$rootProject.roomVersion"
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     kapt "android.arch.lifecycle:compiler:$rootProject.lifecycleVersion"
     kapt "android.arch.persistence.room:compiler:$rootProject.roomVersion"
 
@@ -68,12 +68,14 @@ dependencies {
     implementation "com.squareup.retrofit2:adapter-rxjava2:$rootProject.retrofitVersion"
     implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.okInterceptorVersion"
 
-    // 3rd party library
+    // databinding
+    kapt "com.android.databinding:compiler:3.0.1"
+
+    // other 3rd party library
     implementation "com.jakewharton.timber:timber:$rootProject.timberVersion"
     implementation "com.google.code.gson:gson:$rootProject.gsonVersion"
 
     // testing library
-    implementation "com.android.support.constraint:constraint-layout:$rootProject.constraintLayoutVersion"
     testImplementation "junit:junit:$rootProject.junitVersion"
     androidTestImplementation "com.android.support.test:runner:$rootProject.runnerVersion"
     androidTestImplementation "com.android.support.test.espresso:espresso-core:$rootProject.espressoVersion"
