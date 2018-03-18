@@ -5,6 +5,7 @@ import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.google.android.gms.location.places.Place;
 import com.mahendri.pasbeli.api.WebService;
 import com.mahendri.pasbeli.viewmodel.AppExecutors;
 import com.mahendri.pasbeli.api.ApiResponse;
@@ -14,9 +15,15 @@ import com.mahendri.pasbeli.entity.Pasar;
 import com.mahendri.pasbeli.entity.Resource;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import io.reactivex.Completable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
 
 /**
  * @author Mahendri
@@ -74,5 +81,23 @@ public class MapRepository {
             }
 
         }.asLiveData();
+    }
+
+    public Completable saveNewPasar(Place place) {
+        return Completable.fromAction(() -> {
+            Timber.i("memulai aksi penambahan pasar");
+            String haystack = ".*(?:pasar|market).*";
+            boolean pasar = Pattern.compile(haystack, Pattern.CASE_INSENSITIVE)
+                    .matcher(place.getName()).find();
+            boolean notDefined = place.getPlaceTypes().contains(Place.TYPE_OTHER);
+            Timber.d("bukan berupa pasar %s and %s", pasar, notDefined);
+            if (!pasar || notDefined) {
+                throw new Exception("Tempat bukan pasar.");
+            }
+
+            pasarDao.insertPasar(new Pasar(place));
+        })
+        .subscribeOn(Schedulers.computation())
+        .observeOn(AndroidSchedulers.mainThread());
     }
 }

@@ -84,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/place_divider"
                 android:text="@string/add_data"
-                android:onClick="@{() -> viewmodel.onAddClick(viewmodel.pasar)}"
+                android:onClick="@{() -> viewmodel.onAddClick()}"
                 style="@style/Widget.AppCompat.Button.Colored"/>
 
         </RelativeLayout>

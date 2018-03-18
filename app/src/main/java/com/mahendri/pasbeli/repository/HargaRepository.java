@@ -22,6 +22,8 @@ import javax.inject.Singleton;
 
 import io.reactivex.Completable;
 import io.reactivex.Maybe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
@@ -115,6 +117,8 @@ public class HargaRepository {
                     else
                         return webService.sendHargaBaru(hargaKonsumen);
                 })
-                .doOnComplete(hargaDao::updateHarga);
+                .doOnComplete(hargaDao::updateHarga)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 }

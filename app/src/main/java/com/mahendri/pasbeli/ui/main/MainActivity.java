@@ -19,7 +19,11 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -41,17 +45,13 @@ import java.util.List;
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity
         implements OnMapReadyCallback, OnSuccessListener<Location>, GoogleMap.OnMarkerClickListener {
 
     private static final int REQUEST_PERMISSION_LOCATION = 1;
-
-    private CompositeDisposable disposable;
+    private static final int PLACE_PICKER_REQUEST = 1;
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -76,10 +76,70 @@ public class MainActivity extends AppCompatActivity
         mainViewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel.class);
         binding.setViewmodel(mainViewModel);
 
-        progressBar = findViewById(R.id.progress_bar);
         setupGoogleMap();
-        setupSheet(binding);
-        setupEventListener();
+        setupBinding(binding);
+        setupViewSubscibe();
+    }
+
+    private void setupGoogleMap() {
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.fragment_map);
+        mapFragment.getMapAsync(this);
+    }
+
+    private void setupBinding(ActivityMainBinding binding) {
+        progressBar = binding.progressBar;
+
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheet);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+    }
+
+    private void setupViewSubscibe() {
+        mainViewModel.intentAdd.observe(this, namaPasar -> {
+            if (namaPasar == null) return;
+
+            mainViewModel.intentAdd.setValue(null);
+            Intent intent = new Intent(this, AddHargaActivity.class);
+            intent.putExtra(AddHargaActivity.EXTRA_NAMA_PASAR, namaPasar);
+            startActivity(intent);
+        });
+
+
+        mainViewModel.addPasar.observe(this, result -> {
+            if (result == null) return;
+
+            mainViewModel.addPasar.setValue(null);
+            Toast.makeText(MainActivity.this, result, Toast.LENGTH_SHORT).show();
+        });
+
+
+        mainViewModel.sendHarga.observe(this, result -> {
+            if (result == null) {
+                progressBar.setVisibility(View.VISIBLE);
+            } else {
+                mainViewModel.sendHarga.postValue(null);
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(this, result, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void setupMarker() {
+        mainViewModel.getMapNearby(currentLocation).observe(this, listResource -> {
+            if (listResource == null || listResource.data == null) return;
+
+            map.clear();
+            List<Pasar> daftarPasar = listResource.data;
+            for (Pasar pasar : daftarPasar) {
+                MarkerOptions markerOptions = new MarkerOptions()
+                        .position(pasar.getLocation())
+                        .icon(VectorBitmapConvert.fromVector(MainActivity.this,
+                                R.drawable.marker_market))
+                        .title(pasar.nama);
+                Marker marker = map.addMarker(markerOptions);
+                marker.setTag(pasar);
+            }
+        });
     }
 
     @Override
@@ -95,7 +155,10 @@ public class MainActivity extends AppCompatActivity
                 startActivity(new Intent(this, DataHistoryActivity.class));
                 return true;
             case R.id.send_data:
-                sendDataHarga();
+                mainViewModel.sendDataHarga();
+                return true;
+            case R.id.new_pasar:
+                toPlacePicker();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -110,22 +173,24 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        subscribeData();
         if (map != null) checkMyLocationLayer();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        unsubscribeData();
     }
 
-    private void subscribeData() {
-        disposable = new CompositeDisposable();
-    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != RESULT_OK) return;
 
-    private void unsubscribeData() {
-        disposable.dispose();
+        switch (requestCode) {
+            case PLACE_PICKER_REQUEST:
+                Place place = PlacePicker.getPlace(this, data);
+                mainViewModel.addPasar(place);
+                break;
+        }
     }
 
     @Override
@@ -215,56 +280,15 @@ public class MainActivity extends AppCompatActivity
         } else super.onBackPressed();
     }
 
-    private void sendDataHarga() {
-        progressBar.setVisibility(View.VISIBLE);
-        disposable.add(mainViewModel.sendDataHarga()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> {
-                    progressBar.setVisibility(View.GONE);
-                    Toast.makeText(MainActivity.this, "Sukses mengirim data",
-                            Toast.LENGTH_SHORT).show();
-                }, throwable -> {
-                    progressBar.setVisibility(View.GONE);
-                    Toast.makeText(MainActivity.this, throwable.getMessage(),
-                            Toast.LENGTH_SHORT).show();
-                }));
+    private void toPlacePicker() {
+        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+        try {
+            startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
+        } catch (GooglePlayServicesRepairableException e) {
+            e.printStackTrace();
+        } catch (GooglePlayServicesNotAvailableException e) {
+            e.printStackTrace();
+        }
     }
 
-    private void setupGoogleMap() {
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.fragment_map);
-        mapFragment.getMapAsync(this);
-    }
-
-    private void setupEventListener() {
-        mainViewModel.getAddNewEvent().observe(this, namaPasar -> {
-            Intent intent = new Intent(this, AddHargaActivity.class);
-            intent.putExtra(AddHargaActivity.EXTRA_NAMA_PASAR, namaPasar);
-            startActivity(intent);
-        });
-    }
-
-    private void setupMarker() {
-        mainViewModel.getMapNearby(currentLocation).observe(this, listResource -> {
-            if (listResource == null || listResource.data == null) return;
-
-            map.clear();
-            List<Pasar> daftarPasar = listResource.data;
-            for (Pasar pasar : daftarPasar) {
-                MarkerOptions markerOptions = new MarkerOptions()
-                        .position(pasar.getLocation())
-                        .icon(VectorBitmapConvert.fromVector(MainActivity.this,
-                                R.drawable.marker_market))
-                        .title(pasar.nama);
-                Marker marker = map.addMarker(markerOptions);
-                marker.setTag(pasar);
-            }
-        });
-    }
-
-    private void setupSheet(ActivityMainBinding binding) {
-        bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheet);
-        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-    }
 }

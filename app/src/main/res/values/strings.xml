@@ -15,5 +15,6 @@
     <string name="location_now">Lokasi sekarang</string>
     <string name="kirim_hasil">Kirim data</string>
     <string name="add_data">Tambahkan data</string>
+    <string name="add_pasar">Tambahkan pasar</string>
 
 </resources>

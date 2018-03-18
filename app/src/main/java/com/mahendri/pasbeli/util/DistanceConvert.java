@@ -3,7 +3,6 @@ package com.mahendri.pasbeli.util;
 import android.location.Location;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.mahendri.pasbeli.api.map.PlaceResult;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
