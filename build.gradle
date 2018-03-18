@@ -29,16 +29,16 @@ task clean(type: Delete) {
 
 // Define versions
 ext {
-    supportLibVersion = '26.1.0'
+    supportLibVersion = '27.1.0'
     gmsVersion = '11.8.0'
     lifecycleVersion = '1.1.0'
     roomVersion = '1.0.0'
-    daggerVersion = '2.14.1'
-    rxJavaVersion = '2.1.8'
-    rxAndroidVersion = '2.0.1'
-    retrofitVersion = '2.3.0'
-    okInterceptorVersion = '3.8.0'
-    timberVersion = '4.6.0'
+    daggerVersion = '2.15'
+    rxJavaVersion = '2.1.10'
+    rxAndroidVersion = '2.0.2'
+    retrofitVersion = '2.4.0'
+    okInterceptorVersion = '3.10.0'
+    timberVersion = '4.6.1'
     gsonVersion = '2.8.2'
     constraintVersion = '1.0.2'
     junitVersion = '4.12'
