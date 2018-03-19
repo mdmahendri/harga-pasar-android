@@ -8,8 +8,8 @@ android {
         applicationId "com.mahendri.pasbeli"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "2.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         resValue "string", "google_maps_key", (project.findProperty("GOOGLE_MAPS_API_KEY") ?: "")
@@ -18,6 +18,9 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+
         }
     }
     compileOptions {
@@ -42,7 +45,6 @@ dependencies {
 
     // google play service
     implementation "com.google.android.gms:play-services-maps:$rootProject.gmsVersion"
-    implementation "com.google.android.gms:play-services-location:$rootProject.gmsVersion"
     implementation "com.google.android.gms:play-services-places:$rootProject.gmsVersion"
 
     // architecture component
@@ -71,9 +73,14 @@ dependencies {
     // databinding
     kapt "com.android.databinding:compiler:3.0.1"
 
-    // other 3rd party library
+    // timber
     implementation "com.jakewharton.timber:timber:$rootProject.timberVersion"
+
+    // gson
     implementation "com.google.code.gson:gson:$rootProject.gsonVersion"
+
+    // firebase job dispatcher
+    implementation "com.firebase:firebase-jobdispatcher:$rootProject.dispatcherVersion"
 
     // testing library
     testImplementation "junit:junit:$rootProject.junitVersion"

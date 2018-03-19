@@ -3,6 +3,8 @@ package com.mahendri.pasbeli.injection;
 import android.app.Application;
 import android.arch.persistence.room.Room;
 
+import com.firebase.jobdispatcher.FirebaseJobDispatcher;
+import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.gson.FieldNamingPolicy;
@@ -34,7 +36,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module(includes = {ViewModelModule.class})
 class AppModule {
 
-    @Singleton @Provides
+    @Provides
     WebService provideWebService() {
         // get default okhttp client
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
@@ -61,9 +63,12 @@ class AppModule {
                 .create(WebService.class);
     }
 
-    @Singleton @Provides
+    @Provides
     PasBeliDb provideDatabase(Application app) {
-        return Room.databaseBuilder(app, PasBeliDb.class, "pasbeli.db").build();
+        return Room
+        		.databaseBuilder(app, PasBeliDb.class, "pasbeli.db")
+        		.addMigrations(PasBeliDb.MIGRATION_1_2)
+        		.build();
     }
 
     @Singleton @Provides
@@ -84,5 +89,15 @@ class AppModule {
     @Singleton @Provides
     FusedLocationProviderClient locationProviderClient(Application app) {
         return LocationServices.getFusedLocationProviderClient(app);
+    }
+
+    @Singleton @Provides
+    GooglePlayDriver providePlayDriver(Application app) {
+        return new GooglePlayDriver(app);
+    }
+
+    @Singleton @Provides
+    FirebaseJobDispatcher provideDispatcher(GooglePlayDriver googlePlayDriver) {
+        return new FirebaseJobDispatcher(googlePlayDriver);
     }
 }

@@ -22,6 +22,9 @@ public interface PasarDao {
             + " LIMIT 20")
     LiveData<List<Pasar>> loadDaftarPasar(double latUser, double lngUser);
 
+    @Query("SELECT * FROM Pasar WHERE version = 0")
+    List<Pasar> addedLocallyList();
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertPasar(Pasar pasar);
 

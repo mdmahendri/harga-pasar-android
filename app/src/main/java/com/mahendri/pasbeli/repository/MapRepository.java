@@ -14,6 +14,7 @@ import com.mahendri.pasbeli.database.PasarDao;
 import com.mahendri.pasbeli.entity.Pasar;
 import com.mahendri.pasbeli.entity.Resource;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -23,6 +24,7 @@ import javax.inject.Singleton;
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Response;
 import timber.log.Timber;
 
 /**
@@ -99,5 +101,18 @@ public class MapRepository {
         })
         .subscribeOn(Schedulers.computation())
         .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    boolean syncListPasar() {
+        try {
+            List<Pasar> newAddPasar = pasarDao.addedLocallyList();
+            if (newAddPasar == null || newAddPasar.size() == 0) return true;
+
+            Response<String> response = webService.sendAddPasar(newAddPasar).execute();
+            return response.isSuccessful();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
