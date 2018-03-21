@@ -26,6 +26,8 @@ public class Pasar {
 
     public double longitude;
 
+    public int version = 0;
+
     public Pasar() {}
 
     public Pasar(Place place) {

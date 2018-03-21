@@ -31,7 +31,7 @@ public abstract class PasBeliDb extends RoomDatabase {
     public static final Migration MIGRATION_1_2 = new Migration(1, 2) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
-            database.execSQL("ALTER TABLE Pasar ADD COLUMN version INTEGER");
+            database.execSQL("ALTER TABLE Pasar ADD COLUMN version INTEGER NOT NULL DEFAULT 0");
             database.execSQL("UPDATE Pasar SET version = 1");
         }
     };

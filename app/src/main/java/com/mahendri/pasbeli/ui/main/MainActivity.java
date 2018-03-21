@@ -19,6 +19,8 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -51,6 +53,7 @@ public class MainActivity extends AppCompatActivity
         implements OnMapReadyCallback, OnSuccessListener<Location>, GoogleMap.OnMarkerClickListener {
 
     private static final int REQUEST_PERMISSION_LOCATION = 1;
+    private static final int FIX_PLAY_SERVICES_REQUEST = 2;
     private static final int PLACE_PICKER_REQUEST = 1;
 
     @Inject
@@ -76,6 +79,17 @@ public class MainActivity extends AppCompatActivity
         mainViewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel.class);
         binding.setViewmodel(mainViewModel);
 
+        //check Play Services
+        GoogleApiAvailability availability = GoogleApiAvailability.getInstance();
+        int playStatus = availability.isGooglePlayServicesAvailable(this);
+        if (playStatus == ConnectionResult.SUCCESS) {
+            showView(binding);
+        } else {
+            availability.getErrorDialog(this, playStatus, FIX_PLAY_SERVICES_REQUEST).show();
+        }
+    }
+
+    private void showView(ActivityMainBinding binding) {
         setupGoogleMap();
         setupBinding(binding);
         setupViewSubscibe();
@@ -189,6 +203,9 @@ public class MainActivity extends AppCompatActivity
             case PLACE_PICKER_REQUEST:
                 Place place = PlacePicker.getPlace(this, data);
                 mainViewModel.addPasar(place);
+                break;
+            case FIX_PLAY_SERVICES_REQUEST:
+                showView(binding);
                 break;
         }
     }
