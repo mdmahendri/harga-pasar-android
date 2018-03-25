@@ -36,7 +36,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module(includes = {ViewModelModule.class})
 class AppModule {
 
-    @Provides
+    @Singleton @Provides
     WebService provideWebService() {
         // get default okhttp client
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
@@ -63,7 +63,7 @@ class AppModule {
                 .create(WebService.class);
     }
 
-    @Provides
+    @Singleton @Provides
     PasBeliDb provideDatabase(Application app) {
         return Room
         		.databaseBuilder(app, PasBeliDb.class, "pasbeli.db")

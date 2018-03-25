@@ -21,7 +21,6 @@ import retrofit2.http.Path;
  * @author Mahendri
  */
 
-@Singleton
 public interface WebService {
 
     @POST("harga")
