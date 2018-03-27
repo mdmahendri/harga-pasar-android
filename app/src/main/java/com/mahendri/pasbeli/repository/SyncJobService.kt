@@ -21,7 +21,7 @@ class SyncJobService : SimpleJobService() {
 
     override fun onRunJob(job: JobParameters?): Int {
         val success = mapRepository.syncListPasar()
-        return if (success) JobService.RESULT_SUCCESS else JobService.RESULT_FAIL_NORETRY;
+        return if (success) JobService.RESULT_SUCCESS else JobService.RESULT_FAIL_NORETRY
     }
 
 }

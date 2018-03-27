@@ -49,8 +49,8 @@ class AddHargaActivity : AppCompatActivity(), View.OnClickListener, AdapterView.
     private var longitude: Double = 0.toDouble()
     private var latitude: Double = 0.toDouble()
 
-    @Inject private lateinit var viewModelFactory: ViewModelProvider.Factory
-    @Inject private lateinit var fusedLocationClient: FusedLocationProviderClient
+    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+    @Inject lateinit var fusedLocationClient: FusedLocationProviderClient
 
     private lateinit var hargaViewModel: HargaViewModel
 
@@ -69,7 +69,7 @@ class AddHargaActivity : AppCompatActivity(), View.OnClickListener, AdapterView.
         permissionDialog = AlertDialog.Builder(this)
                 .setTitle("Lokasi Dibutuhkan")
                 .setMessage("Lokasi diperlukan untuk mendata komoditas")
-                .setNeutralButton("Keluar") { dialogInterface, i -> finish() }
+                .setNeutralButton("Keluar") { _, _ -> finish() }
                 .create()
         val fab = findViewById<FloatingActionButton>(R.id.add_komoditi_fab)
 

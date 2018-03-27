@@ -31,13 +31,13 @@ class HargaViewModel @Inject internal constructor(
 
     private var kualitasSubject: PublishSubject<String>? = null
     private var barangSubject: PublishSubject<String>? = null
-    private val kualitas = MutableLiveData<List<String>>()
+    internal val kualitas = MutableLiveData<List<String>>()
 
     internal val listBarang: LiveData<Resource<out ArrayList<String>>>
         get() = Transformations.map(repository.allBarang) { resourceList ->
             val namaList = ArrayList<String>()
             if (resourceList.data != null) {
-                for ((_, nama) in resourceList.data)
+                for ((_, nama) in resourceList.data.iterator())
                     if (!namaList.contains(nama)) namaList.add(nama)
                 return@map Resource.success(namaList)
             } else if (resourceList.fetchStatus == FetchStatus.LOADING)

@@ -51,14 +51,14 @@ import timber.log.Timber
 class MainActivity : AppCompatActivity(), OnMapReadyCallback, OnSuccessListener<Location>,
         GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener {
 
-    @Inject private lateinit var viewModelFactory: ViewModelProvider.Factory
-    @Inject private lateinit var fusedLocationClient: FusedLocationProviderClient
+    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+    @Inject lateinit var fusedLocationClient: FusedLocationProviderClient
 
     private lateinit var mainViewModel: MainViewModel
     private lateinit var binding: ActivityMainBinding
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<*>
     private lateinit var progressBar: ProgressBar
-    private lateinit var map: GoogleMap
+    private var map: GoogleMap? = null
     private var currentLocation: Location? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -130,7 +130,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, OnSuccessListener<
             mainViewModel.getMapNearby(it).observe(this, Observer {
                 if (it?.data == null) return@Observer
 
-                map.clear()
+                map?.clear()
                 val daftarPasar = it.data
                 for (pasar in daftarPasar) {
                     val markerOptions = MarkerOptions()
@@ -138,8 +138,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, OnSuccessListener<
                             .icon(VectorBitmapConvert.fromVector(this@MainActivity,
                                     R.drawable.marker_market))
                             .title(pasar.nama)
-                    val marker = map.addMarker(markerOptions)
-                    marker.tag = pasar
+                    val marker = map?.addMarker(markerOptions)
+                    marker?.tag = pasar
                 }
             })
 
@@ -230,7 +230,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, OnSuccessListener<
                         Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
             // tambahkan titik sekarang
-            map.isMyLocationEnabled = true
+            map?.isMyLocationEnabled = true
 
             // get lokasi sekarang
             fusedLocationClient.lastLocation.addOnSuccessListener(this, this)
@@ -246,15 +246,15 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, OnSuccessListener<
         }
 
         currentLocation = location
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude,
+        map?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude,
                 location.longitude), 15f))
 
         // draw marker
         setupMarker()
 
         // set listener klik pada marker dan map
-        map.setOnMapClickListener(this)
-        map.setOnMarkerClickListener(this)
+        map?.setOnMapClickListener(this)
+        map?.setOnMarkerClickListener(this)
     }
 
     override fun onMapClick(latLng: LatLng) {
