@@ -21,19 +21,19 @@
         android:layout_alignLeft="@id/komoditi_data"
         android:layout_below="@id/komoditi_data"
         android:drawableLeft="@drawable/ic_location_on_black_24dp"
-        android:drawablePadding="@dimen/text_img_margin"
-        android:layout_marginTop="@dimen/text_img_margin"
+        android:drawablePadding="@dimen/dp4_margin"
+        android:layout_marginTop="@dimen/dp4_margin"
         android:text="Pasar Genjing"/>
 
     <TextView
         android:id="@+id/komoditi_waktu"
         android:layout_toRightOf="@id/komoditi_tempat"
         android:layout_alignTop="@id/komoditi_tempat"
-        android:layout_marginLeft="@dimen/mini_margin"
+        android:layout_marginLeft="@dimen/dp8_margin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:drawableLeft="@drawable/ic_access_time_black_24dp"
-        android:drawablePadding="@dimen/text_img_margin"
+        android:drawablePadding="@dimen/dp4_margin"
         android:text="13:40"/>
 
     <View

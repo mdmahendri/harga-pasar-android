@@ -52,6 +52,7 @@ dependencies {
     implementation "com.google.android.gms:play-services-maps:$rootProject.gmsVersion"
     implementation "com.google.android.gms:play-services-location:$rootProject.gmsVersion"
     implementation "com.google.android.gms:play-services-places:$rootProject.gmsVersion"
+    implementation "com.google.android.gms:play-services-auth:$rootProject.gmsVersion"
 
     // architecture component
     implementation "android.arch.lifecycle:extensions:$rootProject.lifecycleVersion"

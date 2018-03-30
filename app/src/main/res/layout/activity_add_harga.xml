@@ -28,8 +28,7 @@
             android:id="@+id/spinner_kualitas"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_marginTop="@dimen/text_img_margin"
-            android:entries="@array/ukuran_array"/>
+            android:layout_marginTop="@dimen/dp4_margin"/>
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/container_price"
@@ -79,7 +78,7 @@
         android:id="@+id/add_komoditi_fab"
         android:layout_width="56dp"
         android:layout_height="56dp"
-        android:layout_margin="@dimen/mini_margin"
+        android:layout_margin="@dimen/dp8_margin"
         android:layout_gravity="bottom|end"
         app:srcCompat="@drawable/ic_add_location_white_24dp"/>
 

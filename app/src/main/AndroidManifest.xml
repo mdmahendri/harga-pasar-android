@@ -28,20 +28,21 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".ui.main.MainActivity"
-            android:label="@string/app_name">
+            android:name=".ui.splash.SplashActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.history.DataHistoryActivity" />
-
         <activity
             android:name=".ui.addharga.AddHargaActivity"
             android:windowSoftInputMode="adjustResize" />
+
+        <activity android:name=".ui.main.MainActivity" />
+        <activity android:name=".ui.history.DataHistoryActivity" />
 
         <service
             android:name=".repository.SyncJobService"

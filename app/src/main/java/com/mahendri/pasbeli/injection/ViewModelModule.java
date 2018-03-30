@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModelProvider;
 import com.mahendri.pasbeli.ui.main.MainViewModel;
 import com.mahendri.pasbeli.ui.addharga.HargaViewModel;
 import com.mahendri.pasbeli.ui.history.HistoryViewModel;
+import com.mahendri.pasbeli.ui.splash.SplashViewModel;
 import com.mahendri.pasbeli.viewmodel.PasBeliViewModelFactory;
 
 import dagger.Binds;
@@ -21,13 +22,18 @@ abstract class ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(HargaViewModel.class)
-    abstract ViewModel bindHargaViewModel(HargaViewModel hargaViewModel);
+    @ViewModelKey(SplashViewModel.class)
+    abstract ViewModel bindSplashViewModel(SplashViewModel splashViewModel);
 
     @Binds
     @IntoMap
     @ViewModelKey(MainViewModel.class)
     abstract ViewModel bindMainViewModel(MainViewModel mainViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(HargaViewModel.class)
+    abstract ViewModel bindHargaViewModel(HargaViewModel hargaViewModel);
 
     @Binds
     @IntoMap

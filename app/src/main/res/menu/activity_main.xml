@@ -13,4 +13,8 @@
         android:id="@+id/new_pasar"
         android:title="@string/add_pasar"/>
 
+    <item
+        android:id="@+id/sign_out"
+        android:title="@string/sign_out"/>
+
 </menu>

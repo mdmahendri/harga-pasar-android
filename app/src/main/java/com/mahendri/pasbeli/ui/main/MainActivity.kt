@@ -20,6 +20,7 @@ import android.view.View
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.Toast
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
@@ -41,6 +42,7 @@ import com.mahendri.pasbeli.databinding.ActivityMainBinding
 import com.mahendri.pasbeli.entity.Pasar
 import com.mahendri.pasbeli.ui.addharga.AddHargaActivity
 import com.mahendri.pasbeli.ui.history.DataHistoryActivity
+import com.mahendri.pasbeli.ui.splash.SplashActivity
 import com.mahendri.pasbeli.util.VectorBitmapConvert
 
 import javax.inject.Inject
@@ -51,6 +53,7 @@ import timber.log.Timber
 class MainActivity : AppCompatActivity(), OnMapReadyCallback, OnSuccessListener<Location>,
         GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener {
 
+    @Inject lateinit var signInClient: GoogleSignInClient
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
     @Inject lateinit var fusedLocationClient: FusedLocationProviderClient
 
@@ -67,6 +70,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, OnSuccessListener<
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         mainViewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel::class.java)
         binding.viewmodel = mainViewModel
+
+        //check mail account
+        title = intent.getStringExtra(SplashActivity.EXTRA_MAIL)
 
         //check Play Services
         val availability = GoogleApiAvailability.getInstance()
@@ -164,6 +170,13 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, OnSuccessListener<
             R.id.new_pasar -> {
                 toPlacePicker()
                 return true
+            }
+            R.id.sign_out -> {
+                signInClient.signOut()
+                        .addOnCompleteListener(this, {
+                            startActivity(Intent(this, SplashActivity::class.java))
+                            finish()
+                        })
             }
         }
         return super.onOptionsItemSelected(item)

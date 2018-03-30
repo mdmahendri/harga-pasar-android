@@ -1,10 +1,4 @@
 <resources>
-    <string-array name="ukuran_array">
-        <item>Ukuran satuan barang</item>
-        <item>kilogram</item>
-        <item>gram</item>
-        <item>bungkus</item>
-    </string-array>
 
     <string name="app_name">Pasbeli</string>
     <string name="title_history">Riwayat</string>
@@ -16,5 +10,10 @@
     <string name="kirim_hasil">Kirim data</string>
     <string name="add_data">Tambahkan data</string>
     <string name="add_pasar">Tambahkan pasar</string>
+    <string name="sign_out">Keluar</string>
+
+    <string name="desc_logo">Pasbeli logo</string>
+    <string name="desc_app">consumer price data collection</string>
+    <string name="welcome_msg">Welcome to Pasbeli</string>
 
 </resources>

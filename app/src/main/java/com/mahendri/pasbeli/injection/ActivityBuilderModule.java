@@ -4,6 +4,7 @@ import com.mahendri.pasbeli.ui.main.MainActivity;
 import com.mahendri.pasbeli.ui.main.MainModule;
 import com.mahendri.pasbeli.ui.addharga.AddHargaActivity;
 import com.mahendri.pasbeli.ui.history.DataHistoryActivity;
+import com.mahendri.pasbeli.ui.splash.SplashActivity;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -15,7 +16,12 @@ import dagger.android.ContributesAndroidInjector;
 @Module
 abstract class ActivityBuilderModule {
 
-    @ContributesAndroidInjector(modules = {MainModule.class})
+    @Authenticate
+    @ContributesAndroidInjector(modules = {AuthModule.class})
+    abstract SplashActivity bindSplashActivity();
+
+    @Authenticate
+    @ContributesAndroidInjector(modules = {MainModule.class, AuthModule.class})
     abstract MainActivity bindMainActivity();
 
     @ContributesAndroidInjector

@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="@dimen/text_img_margin"
+    app:cardCornerRadius="@dimen/dp4_margin"
     app:cardUseCompatPadding="true">
     
     <RelativeLayout
@@ -40,7 +40,7 @@
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_horizontal_margin"
             android:drawableLeft="@drawable/ic_dashboard_black_24dp"
-            android:drawablePadding="@dimen/text_img_margin"
+            android:drawablePadding="@dimen/dp4_margin"
             android:text="25 komoditas"/>
 
         <TextView
@@ -51,7 +51,7 @@
             android:layout_toRightOf="@id/place_komoditas"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:drawableLeft="@drawable/ic_copyright_black_20dp"
-            android:drawablePadding="@dimen/text_img_margin"
+            android:drawablePadding="@dimen/dp4_margin"
             android:text="25 komoditas"/>
 
     </RelativeLayout>
