@@ -79,7 +79,7 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.okInterceptorVersion"
 
     // databinding
-    kapt "com.android.databinding:compiler:3.0.1"
+    kapt "com.android.databinding:compiler:3.1.0"
 
     // timber
     implementation "com.jakewharton.timber:timber:$rootProject.timberVersion"
