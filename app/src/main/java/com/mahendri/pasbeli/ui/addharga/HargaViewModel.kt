@@ -4,19 +4,14 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Transformations
 import android.arch.lifecycle.ViewModel
-
-import com.mahendri.pasbeli.entity.Barang
 import com.mahendri.pasbeli.entity.FetchStatus
 import com.mahendri.pasbeli.entity.Resource
 import com.mahendri.pasbeli.repository.HargaRepository
-
-import java.util.ArrayList
-import java.util.concurrent.TimeUnit
-
-import javax.inject.Inject
-
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
+import java.util.*
+import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 /**
  * @author Mahendri

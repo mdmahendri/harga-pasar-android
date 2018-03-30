@@ -1,9 +1,9 @@
 package com.mahendri.pasbeli.injection;
 
-import com.mahendri.pasbeli.ui.main.MainActivity;
-import com.mahendri.pasbeli.ui.main.MainModule;
 import com.mahendri.pasbeli.ui.addharga.AddHargaActivity;
 import com.mahendri.pasbeli.ui.history.DataHistoryActivity;
+import com.mahendri.pasbeli.ui.main.MainActivity;
+import com.mahendri.pasbeli.ui.main.MainModule;
 import com.mahendri.pasbeli.ui.splash.SplashActivity;
 
 import dagger.Module;

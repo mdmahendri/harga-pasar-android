@@ -3,9 +3,9 @@ package com.mahendri.pasbeli.injection;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 
-import com.mahendri.pasbeli.ui.main.MainViewModel;
 import com.mahendri.pasbeli.ui.addharga.HargaViewModel;
 import com.mahendri.pasbeli.ui.history.HistoryViewModel;
+import com.mahendri.pasbeli.ui.main.MainViewModel;
 import com.mahendri.pasbeli.ui.splash.SplashViewModel;
 import com.mahendri.pasbeli.viewmodel.PasBeliViewModelFactory;
 

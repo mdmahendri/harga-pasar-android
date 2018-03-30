@@ -5,7 +5,6 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.content.pm.PackageManager
-import android.location.Location
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.TextInputEditText
@@ -14,12 +13,7 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
-import android.widget.Spinner
-import android.widget.Toast
-
+import android.widget.*
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -28,12 +22,9 @@ import com.mahendri.pasbeli.R
 import com.mahendri.pasbeli.entity.FetchStatus
 import com.mahendri.pasbeli.util.AutoValidator
 import com.mahendri.pasbeli.util.TextChangeWatch
-
-import java.util.Locale
-
-import javax.inject.Inject
-
 import dagger.android.AndroidInjection
+import java.util.*
+import javax.inject.Inject
 
 class AddHargaActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnItemSelectedListener {
 

@@ -1,13 +1,9 @@
 package com.mahendri.pasbeli.api
 
 import android.arch.lifecycle.LiveData
-
 import com.mahendri.pasbeli.entity.Barang
 import com.mahendri.pasbeli.entity.HargaKonsumen
 import com.mahendri.pasbeli.entity.Pasar
-
-import javax.inject.Singleton
-
 import io.reactivex.Completable
 import retrofit2.Call
 import retrofit2.http.Body

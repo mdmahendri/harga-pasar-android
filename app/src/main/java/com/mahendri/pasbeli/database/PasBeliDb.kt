@@ -4,12 +4,9 @@ import android.arch.persistence.db.SupportSQLiteDatabase
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.RoomDatabase
 import android.arch.persistence.room.migration.Migration
-
 import com.mahendri.pasbeli.entity.Barang
 import com.mahendri.pasbeli.entity.HargaKonsumen
 import com.mahendri.pasbeli.entity.Pasar
-
-import javax.inject.Singleton
 
 /**
  * @author Mahendri

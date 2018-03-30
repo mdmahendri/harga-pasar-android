@@ -6,13 +6,13 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.google.android.gms.location.places.Place;
-import com.mahendri.pasbeli.api.WebService;
-import com.mahendri.pasbeli.viewmodel.AppExecutors;
 import com.mahendri.pasbeli.api.ApiResponse;
+import com.mahendri.pasbeli.api.WebService;
 import com.mahendri.pasbeli.database.PasBeliDb;
 import com.mahendri.pasbeli.database.PasarDao;
 import com.mahendri.pasbeli.entity.Pasar;
 import com.mahendri.pasbeli.entity.Resource;
+import com.mahendri.pasbeli.viewmodel.AppExecutors;
 
 import java.io.IOException;
 import java.util.List;

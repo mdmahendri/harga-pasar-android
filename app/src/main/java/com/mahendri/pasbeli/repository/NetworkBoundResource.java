@@ -16,17 +16,17 @@
 
 package com.mahendri.pasbeli.repository;
 
-import com.mahendri.pasbeli.viewmodel.AppExecutors;
-import com.mahendri.pasbeli.api.ApiResponse;
-import com.mahendri.pasbeli.entity.Resource;
-import com.mahendri.pasbeli.util.ObjectHelper;
-
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MediatorLiveData;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
+
+import com.mahendri.pasbeli.api.ApiResponse;
+import com.mahendri.pasbeli.entity.Resource;
+import com.mahendri.pasbeli.util.ObjectHelper;
+import com.mahendri.pasbeli.viewmodel.AppExecutors;
 
 /**
  * A generic class that can provide a resource backed by both the sqlite database and the network.
