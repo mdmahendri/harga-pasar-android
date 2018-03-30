@@ -6,10 +6,6 @@
         android:title="@string/title_history"/>
 
     <item
-        android:id="@+id/send_data"
-        android:title="@string/kirim_hasil"/>
-
-    <item
         android:id="@+id/new_pasar"
         android:title="@string/add_pasar"/>
 

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <import type="android.view.View"/>
@@ -78,7 +79,8 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_centerInParent="true"
-                android:visibility="@{viewmodel.isLogin ? View.VISIBLE : View.GONE}"/>
+                android:visibility="@{viewmodel.isLogin ? View.VISIBLE : View.GONE}"
+                tools:visibility="gone"/>
 
         </RelativeLayout>
 

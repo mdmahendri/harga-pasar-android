@@ -21,13 +21,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
-        <ProgressBar
-            android:id="@+id/progress_bar"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:layout_gravity="center"
-            android:visibility="gone"/>
-
         <RelativeLayout
             android:id="@+id/bottom_sheet"
             android:layout_width="match_parent"

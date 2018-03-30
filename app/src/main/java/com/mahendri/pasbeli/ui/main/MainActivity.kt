@@ -17,12 +17,10 @@ import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.Toast
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
-
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
@@ -37,7 +35,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.OnSuccessListener
-
 import com.mahendri.pasbeli.R
 import com.mahendri.pasbeli.databinding.ActivityMainBinding
 import com.mahendri.pasbeli.entity.Pasar
@@ -45,11 +42,9 @@ import com.mahendri.pasbeli.ui.addharga.AddHargaActivity
 import com.mahendri.pasbeli.ui.history.DataHistoryActivity
 import com.mahendri.pasbeli.ui.splash.SplashActivity
 import com.mahendri.pasbeli.util.VectorBitmapConvert
-
-import javax.inject.Inject
-
 import dagger.android.AndroidInjection
 import timber.log.Timber
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback, OnSuccessListener<Location>,
         GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener {
@@ -119,17 +114,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, OnSuccessListener<
             mainViewModel.addPasar.value = null
             Toast.makeText(this@MainActivity, it, Toast.LENGTH_SHORT).show()
         })
-
-
-        mainViewModel.sendHarga.observe(this, Observer {
-            if (it == null) {
-                progressBar.visibility = View.VISIBLE
-            } else {
-                mainViewModel.sendHarga.postValue(null)
-                progressBar.visibility = View.GONE
-                Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
-            }
-        })
     }
 
     private fun setupMarker() {
@@ -162,10 +146,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, OnSuccessListener<
         when (item.itemId) {
             R.id.navigation_history -> {
                 startActivity(Intent(this, DataHistoryActivity::class.java))
-                return true
-            }
-            R.id.send_data -> {
-                mainViewModel.sendDataHarga()
                 return true
             }
             R.id.new_pasar -> {

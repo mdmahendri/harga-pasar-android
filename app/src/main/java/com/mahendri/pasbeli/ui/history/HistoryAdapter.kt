@@ -1,19 +1,14 @@
 package com.mahendri.pasbeli.ui.history
 
-import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-
 import com.mahendri.pasbeli.R
 import com.mahendri.pasbeli.entity.BarangHarga
-
 import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
+import java.util.*
 
 /**
  * @author Mahendri Dwicahyo
