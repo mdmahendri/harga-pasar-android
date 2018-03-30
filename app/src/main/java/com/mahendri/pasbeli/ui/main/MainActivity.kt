@@ -1,6 +1,7 @@
 package com.mahendri.pasbeli.ui.main
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
@@ -207,49 +208,49 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, OnSuccessListener<
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
                                             grantResults: IntArray) {
 
-        if (requestCode == REQUEST_PERMISSION_LOCATION) {
-
-            // granted permission
-            if (grantResults.size == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                checkMyLocationLayer()
-            } else {
-                // meminta permission lagi
-                requestLocationPermission()
+        when (requestCode) {
+            REQUEST_PERMISSION_LOCATION -> {
+                // granted permission
+                if (grantResults.size == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    addMyLocation()
+                }
             }
-        }
-    }
-
-    private fun requestLocationPermission() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                        Manifest.permission.ACCESS_FINE_LOCATION)) {
-
-            Snackbar.make(binding.rootLayout, "Dibutuhkan akses lokasi untuk mendata barang",
-                    Snackbar.LENGTH_SHORT).setAction("OK") { _ ->
-                // meminta permission
-                ActivityCompat.requestPermissions(this@MainActivity,
-                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                        REQUEST_PERMISSION_LOCATION)
-            }.show()
-
-        } else {
-            ActivityCompat.requestPermissions(this,
-                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                    REQUEST_PERMISSION_LOCATION)
         }
     }
 
     private fun checkMyLocationLayer() {
         if (ActivityCompat.checkSelfPermission(this,
-                        Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-            // tambahkan titik sekarang
-            map?.isMyLocationEnabled = true
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                            Manifest.permission.ACCESS_FINE_LOCATION)) {
 
-            // get lokasi sekarang
-            fusedLocationClient.lastLocation.addOnSuccessListener(this, this)
+                Snackbar.make(binding.rootLayout, "Dibutuhkan akses lokasi untuk mendata barang",
+                        Snackbar.LENGTH_SHORT).setAction("OK") { _ ->
+                    // meminta permission
+                    ActivityCompat.requestPermissions(this@MainActivity,
+                            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                            REQUEST_PERMISSION_LOCATION)
+                }.show()
 
-        } else
-            requestLocationPermission()
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                        REQUEST_PERMISSION_LOCATION)
+            }
+
+        } else {
+            addMyLocation()
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun addMyLocation() {
+        // tambahkan titik sekarang
+        map?.isMyLocationEnabled = true
+
+        // get lokasi sekarang
+        fusedLocationClient.lastLocation.addOnSuccessListener(this, this)
     }
 
     override fun onSuccess(location: Location?) {
