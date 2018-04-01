@@ -94,13 +94,14 @@ public class HargaRepository {
         return barangDao.getId(nama, kualitas);
     }
 
-    public void insertNewEntry(int idBarang,long harga,String namaTempat,double latitude,double longitude) {
+    public void insertNewEntry(String mail, int idBarang, long harga, String namaTempat, double latitude, double longitude) {
         HargaKonsumen hargaKonsumen = new HargaKonsumen();
         hargaKonsumen.idBarang = idBarang;
         hargaKonsumen.harga = harga;
         hargaKonsumen.namaTempat = namaTempat;
         hargaKonsumen.latitude = latitude;
         hargaKonsumen.longitude = longitude;
+        hargaKonsumen.mail = mail;
         hargaKonsumen.waktuCatat = System.currentTimeMillis();
 
         appExecutors.diskIO().execute(() -> hargaDao.insertHarga(hargaKonsumen));

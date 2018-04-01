@@ -16,10 +16,10 @@ import dagger.android.ContributesAndroidInjector;
 @Module
 abstract class ActivityBuilderModule {
 
-    @ContributesAndroidInjector(modules = {AuthModule.class})
+    @ContributesAndroidInjector
     abstract SplashActivity bindSplashActivity();
 
-    @ContributesAndroidInjector(modules = {MainModule.class, AuthModule.class})
+    @ContributesAndroidInjector(modules = {MainModule.class})
     abstract MainActivity bindMainActivity();
 
     @ContributesAndroidInjector

@@ -14,6 +14,8 @@ import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
 import android.view.View
 import android.widget.*
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -154,9 +156,15 @@ class AddHargaActivity : AppCompatActivity(), View.OnClickListener, AdapterView.
             Toast.makeText(this, "Tidak boleh ada isian kosong", Toast.LENGTH_SHORT).show()
             return
         }
+        val account = GoogleSignIn.getLastSignedInAccount(this)?.email
+        if (account != null) {
+            hargaViewModel.insertNewHarga(account, hargaText.text.toString().toLong(),
+                    namaTempatText.text.toString(), latitude, longitude)
+        } else {
+            Toast.makeText(this, "Ulangi login dari awal", Toast.LENGTH_SHORT).show()
+            finish()
+        }
 
-        hargaViewModel.insertNewHarga(java.lang.Long.parseLong(hargaText.text.toString()),
-                namaTempatText.text.toString(), latitude, longitude)
     }
 
     private fun updateLocation() {

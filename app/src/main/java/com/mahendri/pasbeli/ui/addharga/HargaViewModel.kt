@@ -60,8 +60,8 @@ class HargaViewModel @Inject internal constructor(
         return kualitas
     }
 
-    internal fun insertNewHarga(harga: Long, namaTempat: String, latitude: Double, longitude: Double) {
-        repository.insertNewEntry(idBarang, harga, namaTempat, latitude, longitude)
+    internal fun insertNewHarga(mail: String, harga: Long, namaTempat: String, latitude: Double, longitude: Double) {
+        repository.insertNewEntry(mail, idBarang, harga, namaTempat, latitude, longitude)
     }
 
     internal fun selectBarang(kualitas: String) {

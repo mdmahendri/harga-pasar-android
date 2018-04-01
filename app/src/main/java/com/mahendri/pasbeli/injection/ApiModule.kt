@@ -14,6 +14,7 @@ import com.mahendri.pasbeli.BuildConfig
 import com.mahendri.pasbeli.api.WebService
 import com.mahendri.pasbeli.preference.Constants
 import com.mahendri.pasbeli.viewmodel.LiveDataCallAdapterFactory
+import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -26,6 +27,7 @@ import javax.inject.Singleton
  * @author Mahendri
  */
 
+@Module
 class ApiModule {
 
     @Singleton

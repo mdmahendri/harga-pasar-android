@@ -31,6 +31,8 @@ public class HargaKonsumen {
     @ColumnInfo(name = "nama_tempat")
     public String namaTempat;
 
+    public String mail;
+
     public int uploaded = 0;
 
     public double latitude;
