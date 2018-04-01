@@ -56,7 +56,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, OnSuccessListener<
     private lateinit var mainViewModel: MainViewModel
     private lateinit var binding: ActivityMainBinding
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<*>
-    private lateinit var progressBar: ProgressBar
     private var map: GoogleMap? = null
     private var currentLocation: Location? = null
 
@@ -92,8 +91,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, OnSuccessListener<
     }
 
     private fun setupBinding(binding: ActivityMainBinding) {
-        progressBar = binding.progressBar
-
         bottomSheetBehavior = BottomSheetBehavior.from<RelativeLayout>(binding.bottomSheet)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
     }

@@ -16,11 +16,9 @@ import dagger.android.ContributesAndroidInjector;
 @Module
 abstract class ActivityBuilderModule {
 
-    @Authenticate
     @ContributesAndroidInjector(modules = {AuthModule.class})
     abstract SplashActivity bindSplashActivity();
 
-    @Authenticate
     @ContributesAndroidInjector(modules = {MainModule.class, AuthModule.class})
     abstract MainActivity bindMainActivity();
 
