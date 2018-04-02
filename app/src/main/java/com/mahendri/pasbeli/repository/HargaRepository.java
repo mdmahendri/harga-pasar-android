@@ -95,14 +95,9 @@ public class HargaRepository {
     }
 
     public void insertNewEntry(String mail, int idBarang, long harga, String namaTempat, double latitude, double longitude) {
-        HargaKonsumen hargaKonsumen = new HargaKonsumen();
-        hargaKonsumen.idBarang = idBarang;
-        hargaKonsumen.harga = harga;
-        hargaKonsumen.namaTempat = namaTempat;
-        hargaKonsumen.latitude = latitude;
-        hargaKonsumen.longitude = longitude;
-        hargaKonsumen.mail = mail;
-        hargaKonsumen.waktuCatat = System.currentTimeMillis();
+        HargaKonsumen hargaKonsumen = new HargaKonsumen(
+                idBarang, harga, System.currentTimeMillis(), namaTempat, mail, latitude, longitude
+        );
 
         appExecutors.diskIO().execute(() -> hargaDao.insertHarga(hargaKonsumen));
     }
@@ -118,7 +113,11 @@ public class HargaRepository {
                     else
                         return webService.sendHargaBaru(hargaKonsumen);
                 })
-                .doOnComplete(hargaDao::updateHarga)
+                .doOnComplete(() -> {
+                     hargaDao.updateHarga();
+                     Timber.i("sukses update data lokal");
+                })
+                .doOnError(Timber::d)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

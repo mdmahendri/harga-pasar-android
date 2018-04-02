@@ -12,7 +12,7 @@ import com.mahendri.pasbeli.entity.Pasar
  * @author Mahendri
  */
 
-@Database(entities = arrayOf(HargaKonsumen::class, Pasar::class, Barang::class), version = 3)
+@Database(entities = arrayOf(HargaKonsumen::class, Pasar::class, Barang::class), version = 4)
 abstract class PasBeliDb : RoomDatabase() {
 
     abstract fun hargaKomoditasDao(): HargaDao
@@ -41,6 +41,13 @@ abstract class PasBeliDb : RoomDatabase() {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("ALTER TABLE HargaKonsumen ADD COLUMN mail TEXT")
             }
+        }
+
+        val MIGRATION_3_4: Migration = object : Migration(3, 4) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                // tidak ada perubahan tetapi hash berubah
+            }
+
         }
     }
 }

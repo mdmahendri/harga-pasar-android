@@ -24,7 +24,8 @@ class AppModule {
     PasBeliDb provideDatabase(Application app) {
         return Room
         		.databaseBuilder(app, PasBeliDb.class, "pasbeli.db")
-        		.addMigrations(PasBeliDb.Companion.getMIGRATION_1_2())
+        		.addMigrations(PasBeliDb.Companion.getMIGRATION_1_2(), PasBeliDb.Companion.getMIGRATION_2_3(),
+                        PasBeliDb.Companion.getMIGRATION_3_4())
         		.build();
     }
 
