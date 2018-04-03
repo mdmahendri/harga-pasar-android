@@ -2,7 +2,6 @@
 
     <string name="app_name">Pasbeli</string>
     <string name="title_history">Riwayat</string>
-    <string name="num_komoditas">%d komoditas</string>
     <string name="edit_place_name">Nama tempat</string>
     <string name="nama_komoditas">Nama barang</string>
     <string name="harga_komoditas">Harga satuan</string>
@@ -11,6 +10,9 @@
     <string name="add_data">Tambahkan data</string>
     <string name="add_pasar">Tambahkan pasar</string>
     <string name="sign_out">Keluar</string>
+
+    <string name="num_komoditas">%d komoditas</string>
+    <string name="tmp_harga">mendata %s seharga %s</string>
 
     <string name="desc_logo">Pasbeli logo</string>
     <string name="desc_app">consumer price data collection</string>

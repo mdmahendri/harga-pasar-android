@@ -9,7 +9,7 @@ import com.google.android.gms.location.places.Place
 import com.mahendri.pasbeli.entity.Pasar
 import com.mahendri.pasbeli.entity.Resource
 import com.mahendri.pasbeli.repository.MapRepository
-import com.mahendri.pasbeli.util.DistanceConvert
+import com.mahendri.pasbeli.util.AppUtil
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
@@ -39,7 +39,7 @@ class MainViewModel @Inject constructor(
 
     internal fun openSheet(currentLocation: Location, select: Pasar) {
         pasar.set(select)
-        distance.set(String.format("%s KM", DistanceConvert.toKm(currentLocation, select.location)))
+        distance.set(String.format("%s KM", AppUtil.toKm(currentLocation, select.location)))
     }
 
     internal fun addPasar(place: Place) {

@@ -113,11 +113,7 @@ public class HargaRepository {
                     else
                         return webService.sendHargaBaru(hargaKonsumen);
                 })
-                .doOnComplete(() -> {
-                     hargaDao.updateHarga();
-                     Timber.i("sukses update data lokal");
-                })
-                .doOnError(Timber::d)
+                .doOnComplete(hargaDao::updateHarga)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
