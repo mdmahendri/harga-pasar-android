@@ -38,13 +38,7 @@ class HistoryAdapter internal constructor(
         }
     }
 
-    inner class HistoryHolder(binding: ItemKomoditiBinding) : RecyclerView.ViewHolder(binding.root) {
-
-        private val binding: ItemKomoditiBinding
-
-        init {
-            this.binding = binding
-        }
+    inner class HistoryHolder(private val binding: ItemKomoditiBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(barangHarga: BarangHarga) {
             binding.catatan = barangHarga

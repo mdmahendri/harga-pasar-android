@@ -24,7 +24,7 @@ data class HargaKonsumen (
 ) {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id_entry")
-    var idEntry: Long = -1
+    var idEntry: Long = 0
 
     @ColumnInfo(name = "id_tempat")
     var idTempat: String? = null
