@@ -1,15 +1,20 @@
 package com.mahendri.pasbeli.ui.addharga
 
-import android.arch.lifecycle.LiveData
+import android.annotation.SuppressLint
 import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Transformations
 import android.arch.lifecycle.ViewModel
-import com.mahendri.pasbeli.entity.FetchStatus
+import android.location.Location
+import android.text.TextUtils
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
 import com.mahendri.pasbeli.entity.Resource
 import com.mahendri.pasbeli.repository.HargaRepository
+import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
-import java.util.*
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -18,60 +23,114 @@ import javax.inject.Inject
  */
 
 class HargaViewModel @Inject internal constructor(
-        private val repository: HargaRepository
+        private val repository: HargaRepository,
+        private val locationClient: FusedLocationProviderClient
 ) : ViewModel() {
 
-    private var idBarang: Int = 0
-    private var namaBarang: String? = null
+    var barang = repository.allBarang
+    val kualitasList = MutableLiveData<List<String>>()
+    val nama = MutableLiveData<String>()
+    val kualitas = MutableLiveData<String>()
+    val namaTempat = MutableLiveData<String>()
+    val harga = MutableLiveData<String>()
+    val location = MutableLiveData<Location>()
 
+    /**
+     * data to observe in view
+     */
+    internal val errorNotif = MutableLiveData<Int>()
+    internal val insertStatus = MutableLiveData<Resource<String>>()
+
+    private lateinit var locationRequest: LocationRequest
+    private var locationCallback: LocationCallback? = null
     private var kualitasSubject: PublishSubject<String>? = null
-    private var barangSubject: PublishSubject<String>? = null
-    internal val kualitas = MutableLiveData<List<String>>()
 
-    internal val listBarang: LiveData<Resource<out ArrayList<String>>>
-        get() = Transformations.map(repository.allBarang) { resourceList ->
-            val namaList = ArrayList<String>()
-            if (resourceList.data != null) {
-                for ((_, nama) in resourceList.data.iterator())
-                    if (!namaList.contains(nama)) namaList.add(nama)
-                return@map Resource.success(namaList)
-            } else if (resourceList.fetchStatus == FetchStatus.LOADING)
-                return@map Resource.loading(null)
-            else
-                return@map Resource.error("gagal ambil",null)
-        }
+    /**
+     * used by databinding in autocomplete callback
+     */
+    fun changeKualitas(nama: CharSequence) {
+        val namaBarang = nama.toString()
+        Timber.d("nama barang berganti: %s", namaBarang)
 
-    internal fun changeKualitas(namaBarang: String) {
         if (kualitasSubject == null) {
             kualitasSubject = PublishSubject.create()
-            kualitasSubject!!.debounce(500, TimeUnit.MILLISECONDS)
-                    .subscribeOn(Schedulers.io())
-                    .subscribe { stringNama ->
-                        this.namaBarang = stringNama
-                        val kualitasList = repository.getKualitas(stringNama)
-                        kualitas.postValue(kualitasList)
-                    }
+
+            kualitasSubject?.also{
+                it.debounce(500, TimeUnit.MILLISECONDS)
+                        .subscribeOn(Schedulers.computation())
+                        .subscribe {
+                            Timber.d("ketikan: %s", it)
+                            kualitasList.postValue(repository.getKualitas(it))
+                        }
+            }
         }
 
         kualitasSubject?.onNext(namaBarang)
     }
 
-    internal fun getKualitas(): LiveData<List<String>> {
-        return kualitas
-    }
+    /**
+     * used by databinding in fab click
+     */
+    internal fun onFabClick(mail: String) {
+        val location = this.location.value
+        val namaBarang = nama.value
+        val kualitasBarang = kualitas.value
+        val currentHarga = harga.value
+        val currentNamaTempat = namaTempat.value
+        if (location == null || location.latitude == 0.0 || location.longitude == 0.0)
+            errorNotif.postValue(AddHargaActivity.ERROR_LOCATION)
+        else if (TextUtils.isEmpty(namaBarang))
+            errorNotif.postValue(AddHargaActivity.ERROR_NAMA)
+        else if (TextUtils.isEmpty(kualitasBarang))
+            errorNotif.postValue(AddHargaActivity.ERROR_KUALITAS)
+        else if (TextUtils.isEmpty(currentHarga))
+            errorNotif.postValue(AddHargaActivity.ERROR_HARGA)
+        else if (currentHarga != null) {
+            Completable
+                    .fromAction {
+                        val id = repository.getIdBarang(namaBarang, kualitasBarang)
+                        if (id == 0) throw IllegalArgumentException("barang tidak valid")
 
-    internal fun insertNewHarga(mail: String, harga: Long, namaTempat: String, latitude: Double, longitude: Double) {
-        repository.insertNewEntry(mail, idBarang, harga, namaTempat, latitude, longitude)
-    }
-
-    internal fun selectBarang(kualitas: String) {
-        if (barangSubject == null) {
-            barangSubject = PublishSubject.create()
-            barangSubject!!.debounce(500, TimeUnit.MILLISECONDS)
-                    .subscribeOn(Schedulers.io())
-                    .subscribe { selected -> this.idBarang = repository.getIdBarang(namaBarang, selected) }
+                        repository.insertNewEntry(mail, id, currentHarga.toLong(), currentNamaTempat,
+                                location.latitude, location.longitude)
+                    }
+                    .subscribeOn(Schedulers.computation())
+                    .doOnSubscribe {
+                        insertStatus.postValue(Resource.loading(null))
+                    }
+                    .subscribe({
+                        insertStatus.postValue(Resource.success("berhasil menambahkan"))
+                    }, {
+                        insertStatus.postValue(Resource.error(it.message, null))
+                    })
         }
+    }
 
-        barangSubject?.onNext(kualitas)
+    @SuppressLint("MissingPermission")
+    internal fun startReqLocation(isAllowed: Boolean) {
+        if (isAllowed) {
+            locationCallback = object : LocationCallback() {
+                override fun onLocationResult(p0: LocationResult?) {
+                    p0?.let {
+                        location.postValue(it.lastLocation)
+                    }
+                }
+            }
+
+            locationClient.requestLocationUpdates(locationRequest, locationCallback, null)
+
+        } else {
+            locationCallback?.apply {
+                locationClient.removeLocationUpdates(this)
+            }
+        }
+    }
+
+    internal fun setTempat(tempat: String) {
+        namaTempat.postValue(tempat)
+    }
+
+    internal fun setLocationReq(locRequest: LocationRequest) {
+        locationRequest = locRequest
     }
 }

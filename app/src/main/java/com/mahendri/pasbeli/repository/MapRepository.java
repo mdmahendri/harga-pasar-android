@@ -106,7 +106,7 @@ public class MapRepository {
     boolean syncListPasar() {
         try {
             List<Pasar> newAddPasar = pasarDao.addedLocallyList();
-            if (newAddPasar == null || newAddPasar.size() == 0) return true;
+            if (newAddPasar.size() == 0) return true;
 
             Response<String> response = webService.sendAddPasar(newAddPasar).execute();
             return response.isSuccessful();

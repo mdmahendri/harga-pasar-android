@@ -13,6 +13,8 @@
 
     <string name="num_komoditas">%d komoditas</string>
     <string name="tmp_harga">mendata %s seharga %s</string>
+    <string name="tmp_location">%s,%s</string>
+
 
     <string name="desc_logo">Pasbeli logo</string>
     <string name="desc_app">consumer price data collection</string>

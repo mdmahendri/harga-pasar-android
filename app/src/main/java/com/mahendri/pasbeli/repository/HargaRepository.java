@@ -52,8 +52,8 @@ public class HargaRepository {
         return hargaDao.loadCatatanHarga();
     }
 
-    public LiveData<Resource<List<Barang>>> getAllBarang() {
-        return new NetworkBoundResource<List<Barang>, List<Barang>>(appExecutors) {
+    public LiveData<Resource<List<String>>> getAllBarang() {
+        return new NetworkBoundResource<List<String>, List<Barang>>(appExecutors) {
 
             @Override
             protected void saveCallResult(@NonNull List<Barang> item) {
@@ -68,14 +68,14 @@ public class HargaRepository {
             }
 
             @Override
-            protected boolean shouldFetch(@Nullable List<Barang> data) {
+            protected boolean shouldFetch(@Nullable List<String> data) {
                 return data == null || data.size() == 0;
             }
 
             @NonNull
             @Override
-            protected LiveData<List<Barang>> loadFromDb() {
-                return barangDao.getBarang();
+            protected LiveData<List<String>> loadFromDb() {
+                return barangDao.getDistinctBarang();
             }
 
             @NonNull

@@ -17,7 +17,6 @@ import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.Toast
 import com.google.android.gms.auth.api.signin.GoogleSignInClient

@@ -17,7 +17,7 @@ interface HargaDao {
     @get:Query("SELECT * FROM HargaKonsumen WHERE uploaded = 0")
     val unsendDataHarga: List<HargaKonsumen>
 
-    @Query("SELECT Barang.nama, HargaKonsumen.harga, HargaKonsumen.nama_tempat," +
+    @Query("SELECT Barang.nama, Barang.kualitas, HargaKonsumen.harga, HargaKonsumen.nama_tempat," +
             " HargaKonsumen.waktu_catat FROM HargaKonsumen" +
             " JOIN Barang ON HargaKonsumen.id_barang = Barang.id_barang")
     fun loadCatatanHarga(): LiveData<List<BarangHarga>>

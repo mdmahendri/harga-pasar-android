@@ -7,6 +7,7 @@ import com.mahendri.pasbeli.util.AppUtil
  * @author Mahendri
  */
 data class BarangHarga(val nama: String,
+                       val kualitas: String,
                        val harga: Long,
                        @ColumnInfo(name = "nama_tempat") val namaTempat: String,
                        @ColumnInfo(name = "waktu_catat") val waktuCatat: Long) {

@@ -1,85 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/root_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="@dimen/activity_horizontal_margin">
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
+    <data>
+        <import type="com.mahendri.pasbeli.entity.FetchStatus"/>
+        <import type="android.view.View"/>
+        <variable
+            name="vm"
+            type="com.mahendri.pasbeli.ui.addharga.HargaViewModel"/>
+    </data>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/root_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_margin="@dimen/activity_horizontal_margin">
 
-        <android.support.design.widget.TextInputLayout
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_gravity="center"
+            android:visibility="@{vm.barang.fetchStatus == FetchStatus.LOADING ? View.VISIBLE : View.GONE}"/>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="@{vm.barang.fetchStatus == FetchStatus.LOADING ? View.GONE : View.VISIBLE}">
 
-            <AutoCompleteTextView
-                android:id="@+id/text_nama_barang"
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/nama_komoditas"
-                android:inputType="textNoSuggestions|textCapSentences"/>
+                android:layout_height="wrap_content">
 
-        </android.support.design.widget.TextInputLayout>
+                <AutoCompleteTextView
+                    android:id="@+id/text_nama_barang"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/nama_komoditas"
+                    android:inputType="textNoSuggestions|textCapSentences"
+                    android:text="@={vm.nama}"
+                    android:onTextChanged="@{(cs, i1, i2, i3) -> vm.changeKualitas(cs)}"
+                    app:list="@{vm.barang}"/>
 
-        <Spinner
-            android:id="@+id/spinner_kualitas"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginTop="@dimen/dp4_margin"/>
+            </android.support.design.widget.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/container_price"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/text_harga"
+            <Spinner
+                android:id="@+id/spinner_kualitas"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/harga_komoditas"
-                android:inputType="number"/>
+                android:layout_height="40dp"
+                android:layout_marginTop="@dimen/dp4_margin"
+                app:entry="@{vm.kualitasList}"
+                app:selected="@={vm.kualitas}"/>
 
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/container_tempat"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/text_nama_tempat"
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/container_price"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/edit_place_name"
-                android:enabled="false"/>
+                android:layout_height="wrap_content">
 
-        </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/text_harga"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/harga_komoditas"
+                    android:inputType="number"
+                    android:text="@={vm.harga}"/>
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/container_lat_lng"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            </android.support.design.widget.TextInputLayout>
 
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/text_lat_lng"
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/container_tempat"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/location_now"
-                android:enabled="false"/>
+                android:layout_height="wrap_content">
 
-        </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/text_nama_tempat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/edit_place_name"
+                    android:enabled="false"
+                    android:text="@={vm.namaTempat}"/>
 
-    </LinearLayout>
+            </android.support.design.widget.TextInputLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/add_komoditi_fab"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_margin="@dimen/dp8_margin"
-        android:layout_gravity="bottom|end"
-        app:srcCompat="@drawable/ic_add_location_white_24dp"/>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/container_lat_lng"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-</android.support.design.widget.CoordinatorLayout>
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/text_lat_lng"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/location_now"
+                    android:text="@{@string/tmp_location(vm.location.latitude, vm.location.longitude)}"
+                    android:enabled="false"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/add_komoditi_fab"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_margin="@dimen/dp8_margin"
+            android:layout_gravity="bottom|end"
+            android:onClick="onFabClick"
+            app:srcCompat="@drawable/ic_add_location_white_24dp"/>
+
+    </android.support.design.widget.CoordinatorLayout>
+
+</layout>

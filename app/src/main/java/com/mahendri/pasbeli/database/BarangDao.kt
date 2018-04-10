@@ -13,8 +13,8 @@ import com.mahendri.pasbeli.entity.Barang
 @Dao
 interface BarangDao {
 
-    @Query("SELECT * FROM Barang")
-    fun getBarang(): LiveData<List<Barang>>
+    @Query("SELECT DISTINCT nama FROM Barang")
+    fun getDistinctBarang(): LiveData<List<String>>
 
     @Query("SELECT kualitas FROM Barang WHERE nama = :nama")
     fun getKualitas(nama: String): List<String>
