@@ -10,8 +10,11 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Spinner
 import com.google.android.gms.common.SignInButton
+import com.mahendri.pasbeli.R
 import com.mahendri.pasbeli.entity.FetchStatus
+import com.mahendri.pasbeli.entity.KualitasUnit
 import com.mahendri.pasbeli.entity.Resource
+import com.mahendri.pasbeli.ui.addharga.KualitasAdapter
 import com.mahendri.pasbeli.ui.splash.SplashViewModel
 import timber.log.Timber
 
@@ -43,14 +46,13 @@ fun setList(textView: AutoCompleteTextView, list: LiveData<Resource<List<String>
 }
 
 @BindingAdapter("entry")
-fun setEntries(spinner: Spinner, data: LiveData<List<String>>) {
+fun setEntries(spinner: Spinner, data: LiveData<List<KualitasUnit>>) {
     val res = data.value
     val isEnable = res != null && !res.isEmpty()
     Timber.i("kondisi list spinner: %s", isEnable)
     spinner.apply {
         isEnabled = isEnable
-        adapter = if (isEnable) ArrayAdapter<String>(spinner.context,
-                android.R.layout.simple_spinner_dropdown_item, res) else null
+        adapter = if (isEnable) KualitasAdapter(spinner.context, R.layout.item_spinner, res) else null
     }
 }
 

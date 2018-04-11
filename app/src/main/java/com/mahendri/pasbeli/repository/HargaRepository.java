@@ -12,6 +12,7 @@ import com.mahendri.pasbeli.database.PasBeliDb;
 import com.mahendri.pasbeli.entity.Barang;
 import com.mahendri.pasbeli.entity.BarangHarga;
 import com.mahendri.pasbeli.entity.HargaKonsumen;
+import com.mahendri.pasbeli.entity.KualitasUnit;
 import com.mahendri.pasbeli.entity.Resource;
 import com.mahendri.pasbeli.viewmodel.AppExecutors;
 
@@ -86,8 +87,8 @@ public class HargaRepository {
         }.asLiveData();
     }
 
-    public List<String> getKualitas(String nama) {
-        return barangDao.getKualitas(nama);
+    public List<KualitasUnit> getKualitas(String nama) {
+        return barangDao.getKualitasUnit(nama);
     }
 
     public int getIdBarang(String nama, String kualitas) {

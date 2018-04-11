@@ -62,7 +62,7 @@ public class PasBeli extends Application implements HasActivityInjector, HasServ
     }
 
     private Job syncJobBuild() {
-        final int periodicity = (int) TimeUnit.HOURS.toSeconds(3);
+        final int periodicity = (int) TimeUnit.HOURS.toSeconds(2);
         final int tolerance = (int) TimeUnit.MINUTES.toSeconds(30);
 
         return dispatcher.newJobBuilder()

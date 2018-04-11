@@ -51,19 +51,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginTop="@dimen/dp4_margin"
+                android:onItemSelected="@{(p0, p1, p2, p3) -> vm.changeSelection(p0)}"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
                 app:entry="@{vm.kualitasList}"
                 app:selected="@={vm.kualitas}"/>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/container_price"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:hint="@{@string/harga_komoditas(vm.unit)}">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/text_harga"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/harga_komoditas"
                     android:inputType="number"
                     android:text="@={vm.harga}"/>
 

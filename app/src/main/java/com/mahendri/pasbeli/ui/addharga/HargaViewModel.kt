@@ -5,10 +5,12 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.location.Location
 import android.text.TextUtils
+import android.widget.AdapterView
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
+import com.mahendri.pasbeli.entity.KualitasUnit
 import com.mahendri.pasbeli.entity.Resource
 import com.mahendri.pasbeli.repository.HargaRepository
 import io.reactivex.Completable
@@ -28,9 +30,10 @@ class HargaViewModel @Inject internal constructor(
 ) : ViewModel() {
 
     var barang = repository.allBarang
-    val kualitasList = MutableLiveData<List<String>>()
+    val kualitasList = MutableLiveData<List<KualitasUnit>>()
     val nama = MutableLiveData<String>()
     val kualitas = MutableLiveData<String>()
+    val unit = MutableLiveData<String>()
     val namaTempat = MutableLiveData<String>()
     val harga = MutableLiveData<String>()
     val location = MutableLiveData<Location>()
@@ -44,6 +47,10 @@ class HargaViewModel @Inject internal constructor(
     private lateinit var locationRequest: LocationRequest
     private var locationCallback: LocationCallback? = null
     private var kualitasSubject: PublishSubject<String>? = null
+
+    init {
+        unit.postValue("satuan")
+    }
 
     /**
      * used by databinding in autocomplete callback
@@ -66,6 +73,15 @@ class HargaViewModel @Inject internal constructor(
         }
 
         kualitasSubject?.onNext(namaBarang)
+    }
+
+    fun changeSelection(adapter: AdapterView<*>?) {
+        val selected: KualitasUnit? = adapter?.selectedItem as KualitasUnit?
+        if (selected == null) {
+            unit.postValue("satuan")
+        } else {
+            unit.postValue("per ${selected.satuan}")
+        }
     }
 
     /**
