@@ -53,8 +53,7 @@
                 android:layout_marginTop="@dimen/dp4_margin"
                 android:onItemSelected="@{(p0, p1, p2, p3) -> vm.changeSelection(p0)}"
                 app:popupTheme="@style/AppTheme.PopupOverlay"
-                app:entry="@{vm.kualitasList}"
-                app:selected="@={vm.kualitas}"/>
+                app:entry="@{vm.kualitasList}"/>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/container_price"

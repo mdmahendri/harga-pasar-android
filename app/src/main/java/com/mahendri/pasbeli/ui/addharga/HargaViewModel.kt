@@ -78,8 +78,10 @@ class HargaViewModel @Inject internal constructor(
     fun changeSelection(adapter: AdapterView<*>?) {
         val selected: KualitasUnit? = adapter?.selectedItem as KualitasUnit?
         if (selected == null) {
+            kualitas.postValue(null)
             unit.postValue("satuan")
         } else {
+            kualitas.postValue(selected.kualitas)
             unit.postValue("per ${selected.satuan}")
         }
     }

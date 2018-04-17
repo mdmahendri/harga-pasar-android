@@ -55,31 +55,3 @@ fun setEntries(spinner: Spinner, data: LiveData<List<KualitasUnit>>) {
         adapter = if (isEnable) KualitasAdapter(spinner.context, R.layout.item_spinner, res) else null
     }
 }
-
-@InverseBindingAdapter(attribute = "selected", event = "selectedAttrChanged")
-fun getSelectedText(spinner: Spinner): String {
-    return spinner.selectedItem as String
-}
-
-@Suppress("UNCHECKED_CAST") //spinner with only text
-@BindingAdapter(value = arrayOf("selected", "selectedAttrChanged"), requireAll = false)
-fun setSelected(spinner: Spinner, newVal: String?, newValChanged: InverseBindingListener) {
-    spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-
-        override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-            if (newVal != null && !newVal.equals(p0?.selectedItem as String?)) {
-                newValChanged.onChange()
-            }
-        }
-
-        override fun onNothingSelected(p0: AdapterView<*>?) {
-
-        }
-
-    }
-    spinner.adapter?.let {
-        val position = (it as ArrayAdapter<String>).getPosition(newVal)
-        spinner.setSelection(position, true)
-
-    }
-}
