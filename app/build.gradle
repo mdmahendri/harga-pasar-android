@@ -9,8 +9,8 @@ android {
         applicationId "com.mahendri.pasbeli"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 2
-        versionName "2.0"
+        versionCode 3
+        versionName "3.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         resValue "string", "google_maps_key", (project.findProperty("GOOGLE_MAPS_API_KEY") ?: "")
@@ -79,7 +79,7 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.okInterceptorVersion"
 
     // databinding
-    kapt "com.android.databinding:compiler:3.1.1"
+    kapt "com.android.databinding:compiler:3.1.2"
 
     // timber
     implementation "com.jakewharton.timber:timber:$rootProject.timberVersion"
