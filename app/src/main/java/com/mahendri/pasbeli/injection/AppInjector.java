@@ -1,6 +1,6 @@
 package com.mahendri.pasbeli.injection;
 
-import com.mahendri.pasbeli.viewmodel.PasBeli;
+import com.mahendri.pasbeli.global.PasBeli;
 
 /**
  * @author Mahendri

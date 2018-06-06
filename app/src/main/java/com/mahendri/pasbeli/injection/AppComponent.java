@@ -2,7 +2,7 @@ package com.mahendri.pasbeli.injection;
 
 import android.app.Application;
 
-import com.mahendri.pasbeli.viewmodel.PasBeli;
+import com.mahendri.pasbeli.global.PasBeli;
 
 import javax.inject.Singleton;
 

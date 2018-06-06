@@ -26,7 +26,7 @@ import android.support.annotation.WorkerThread;
 import com.mahendri.pasbeli.api.ApiResponse;
 import com.mahendri.pasbeli.entity.Resource;
 import com.mahendri.pasbeli.util.ObjectHelper;
-import com.mahendri.pasbeli.viewmodel.AppExecutors;
+import com.mahendri.pasbeli.global.AppExecutors;
 
 /**
  * A generic class that can provide a resource backed by both the sqlite database and the network.

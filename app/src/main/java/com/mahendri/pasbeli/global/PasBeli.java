@@ -1,4 +1,4 @@
-package com.mahendri.pasbeli.viewmodel;
+package com.mahendri.pasbeli.global;
 
 import android.app.Activity;
 import android.app.Application;
@@ -43,6 +43,8 @@ public class PasBeli extends Application implements HasActivityInjector, HasServ
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
+        } else {
+            Timber.plant(new CrashlyticsTree());
         }
 
         AppInjector.init(this);

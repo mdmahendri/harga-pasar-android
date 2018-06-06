@@ -12,7 +12,7 @@ import com.mahendri.pasbeli.database.PasBeliDb;
 import com.mahendri.pasbeli.database.PasarDao;
 import com.mahendri.pasbeli.entity.Pasar;
 import com.mahendri.pasbeli.entity.Resource;
-import com.mahendri.pasbeli.viewmodel.AppExecutors;
+import com.mahendri.pasbeli.global.AppExecutors;
 
 import java.io.IOException;
 import java.util.List;

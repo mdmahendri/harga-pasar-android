@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file:///storage/Code/Android/project/harga-pasar/app/app.iml" filepath="/storage/Code/Android/project/harga-pasar/app/app.iml" />
-      <module fileurl="file:///storage/Code/Android/project/harga-pasar/harga-pasar.iml" filepath="/storage/Code/Android/project/harga-pasar/harga-pasar.iml" />
+      <module fileurl="file:///storage/Code/android/harga-pasar/app/app.iml" filepath="/storage/Code/android/harga-pasar/app/app.iml" />
+      <module fileurl="file:///storage/Code/android/harga-pasar/harga-pasar.iml" filepath="/storage/Code/android/harga-pasar/harga-pasar.iml" />
     </modules>
   </component>
 </project>

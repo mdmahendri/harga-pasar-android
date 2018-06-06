@@ -59,7 +59,7 @@ class SplashActivity : AppCompatActivity() {
             val account = completedTask.getResult(ApiException::class.java)
             updateUI(account)
         } catch (e: ApiException) {
-            Timber.w("Sign in fail code %s", e.statusCode)
+            Timber.e("Sign in fail code %s", e.statusCode)
             updateUI(null)
         }
     }
@@ -67,9 +67,9 @@ class SplashActivity : AppCompatActivity() {
     private fun initSubscribe() {
         splashViewModel.goSignIn.observe(this, Observer {toAuth ->
             if (toAuth == true) {
-                splashViewModel.goSignIn.postValue(false)
                 val signIn = signInClient.signInIntent
                 startActivityForResult(signIn, SIGN_IN_REQUEST)
+                splashViewModel.goSignIn.postValue(false)
             }
         })
 

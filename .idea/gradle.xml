@@ -7,8 +7,8 @@
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
           <set>
-            <option value="/storage/Code/Android/project/harga-pasar" />
-            <option value="/storage/Code/Android/project/harga-pasar/app" />
+            <option value="/storage/Code/android/harga-pasar" />
+            <option value="/storage/Code/android/harga-pasar/app" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

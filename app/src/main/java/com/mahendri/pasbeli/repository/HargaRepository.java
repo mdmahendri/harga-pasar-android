@@ -14,7 +14,7 @@ import com.mahendri.pasbeli.entity.BarangHarga;
 import com.mahendri.pasbeli.entity.HargaKonsumen;
 import com.mahendri.pasbeli.entity.KualitasUnit;
 import com.mahendri.pasbeli.entity.Resource;
-import com.mahendri.pasbeli.viewmodel.AppExecutors;
+import com.mahendri.pasbeli.global.AppExecutors;
 
 import java.util.List;
 
