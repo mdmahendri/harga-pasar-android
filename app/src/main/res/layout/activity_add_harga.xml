@@ -66,6 +66,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"
+                    android:maxLength="8"
                     android:text="@={vm.harga}"/>
 
             </android.support.design.widget.TextInputLayout>
@@ -109,7 +110,7 @@
             android:layout_margin="@dimen/dp8_margin"
             android:layout_gravity="bottom|end"
             android:onClick="onFabClick"
-            app:srcCompat="@drawable/ic_add_location_white_24dp"/>
+            app:srcCompat="@drawable/ic_add_white_24dp"/>
 
     </android.support.design.widget.CoordinatorLayout>
 

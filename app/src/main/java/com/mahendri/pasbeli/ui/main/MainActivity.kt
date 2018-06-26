@@ -115,7 +115,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, OnSuccessListener<
     private fun setupMarker() {
         currentLocation?.let {
             mainViewModel.getMapNearby(it).observe(this, Observer {
-                if (it?.data == null) return@Observer
+                if (it?.data == null) {
+                    Timber.d("data kosong, aneh jika terkoneksi internet")
+                    return@Observer
+                }
 
                 map?.clear()
                 val daftarPasar = it.data

@@ -82,7 +82,7 @@ class AddHargaActivity : AppCompatActivity() {
                 errorNotif.postValue(NORMAL)
                 val status: String = when (it) {
                     ERROR_LOCATION ->  "Kesalahan dalam mengambil lokasi"
-                    ERROR_HARGA -> "Pastikan harga sudah terisi"
+                    ERROR_HARGA -> "Pastikan harga barang benar"
                     ERROR_NAMA -> "Nama barang kosong"
                     ERROR_KUALITAS -> "Pilih jenis barang"
                     else -> ""

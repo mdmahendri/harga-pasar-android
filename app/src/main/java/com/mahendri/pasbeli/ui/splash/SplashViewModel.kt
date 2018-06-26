@@ -4,13 +4,16 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.databinding.ObservableBoolean
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.mahendri.pasbeli.repository.UserRepository
 import javax.inject.Inject
 
 /**
  * @author Mahendri
  */
 
-class SplashViewModel @Inject constructor () : ViewModel() {
+class SplashViewModel @Inject constructor (
+    private val userRepo: UserRepository
+) : ViewModel() {
 
     val isLogin = ObservableBoolean(true)
 
@@ -19,7 +22,9 @@ class SplashViewModel @Inject constructor () : ViewModel() {
 
     internal fun updateViewState(account: GoogleSignInAccount?) {
         if (account != null) {
-            goMain.postValue(account.email)
+            userRepo.saveMail(account.email).subscribe({
+                goMain.postValue(account.email)
+            })
         } else {
             isLogin.set(false)
         }

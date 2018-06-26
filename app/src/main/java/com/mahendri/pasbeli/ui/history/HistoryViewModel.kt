@@ -6,17 +6,22 @@ import android.arch.lifecycle.ViewModel
 import android.databinding.ObservableBoolean
 import com.mahendri.pasbeli.entity.BarangHarga
 import com.mahendri.pasbeli.repository.HargaRepository
+import com.mahendri.pasbeli.repository.UserRepository
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 /**
  * @author Mahendri
  */
-class HistoryViewModel @Inject constructor (private val repository: HargaRepository) : ViewModel() {
+class HistoryViewModel @Inject constructor (
+    private val repository: HargaRepository,
+    private val userRepo: UserRepository
+) : ViewModel() {
 
     val isSend = ObservableBoolean(false)
 
     internal val sendHarga = MutableLiveData<String>()
+    private val pointsText = MutableLiveData<String>()
 
     private val disposable = CompositeDisposable()
 
@@ -30,8 +35,22 @@ class HistoryViewModel @Inject constructor (private val repository: HargaReposit
         disposable.add(repository.sendDataEntry()
                 .doOnSubscribe { isSend.set(true) }
                 .doOnTerminate { isSend.set(false) }
-                .subscribe(
-                        { sendHarga.postValue("Sukses mengirim data") },
-                        { throwable -> sendHarga.postValue(throwable.message) }))
+                .subscribe({
+                    userRepo.updatePoints().subscribe {
+                        value -> pointsText.postValue(value.toString())
+                    }
+                    sendHarga.postValue("Sukses mengirim data")
+                }, {
+                    throwable -> sendHarga.postValue(throwable.message)
+                }))
+    }
+
+    internal fun requestCount(): LiveData<String> {
+        userRepo.loadPoints()
+                .subscribe {
+                    value -> pointsText.postValue(value.toString())
+                }
+
+        return pointsText
     }
 }

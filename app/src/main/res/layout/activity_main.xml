@@ -42,13 +42,19 @@
                 android:text="@{viewmodel.pasar.nama}"
                 tools:text="Pasar Genjing" />
 
+            <ImageView
+                android:id="@+id/ic_symbol"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/place_title"
+                app:srcCompat="@drawable/ic_location_on_black_24dp"/>
+
             <TextView
                 android:id="@+id/place_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_location_on_black_24dp"
-                android:drawableStart="@drawable/ic_location_on_black_24dp"
-                android:layout_below="@id/place_title"
+                android:layout_toRightOf="@id/ic_symbol"
+                android:layout_alignTop="@id/ic_symbol"
                 android:layout_marginBottom="@dimen/dp8_margin"
                 android:text="@{viewmodel.pasar.alamat}"
                 tools:text="Jalan Merdeka Barat No 15" />

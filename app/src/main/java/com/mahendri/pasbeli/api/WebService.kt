@@ -5,6 +5,7 @@ import com.mahendri.pasbeli.entity.Barang
 import com.mahendri.pasbeli.entity.HargaKonsumen
 import com.mahendri.pasbeli.entity.Pasar
 import io.reactivex.Completable
+import io.reactivex.Single
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -23,9 +24,13 @@ interface WebService {
     @POST("pasar")
     fun sendAddPasar(@Body daftarPasar: List<Pasar>): Call<String>
 
+    @GET("points/{mail}")
+    fun fetchPoints(@Path("mail") mailId: String): Single<Int>
+
     @GET("barang")
     fun fetchListBarang(): LiveData<ApiResponse<List<Barang>>>
 
     @GET("pasar/{location}")
-    fun fetchPasarNear(@Path("location") locationString: String): LiveData<ApiResponse<List<Pasar>>>
+    fun fetchPasarNear(@Path("location") locationString: String):
+            LiveData<ApiResponse<List<Pasar>>>
 }
